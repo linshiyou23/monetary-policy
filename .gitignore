@@ -7,3 +7,8 @@ Thumbs.db
 .DS_Store
 Desktop.ini
 ~$*
+
+# 央行报告专栏提取文本：派生内容仅本地留存，索引 CSV 仍入库
+中国货币政策执行报告/专栏文章/
+# Python 缓存
+__pycache__/

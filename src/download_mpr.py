@@ -16,7 +16,7 @@ import time
 
 BASE = "https://www.pbc.gov.cn"
 LIST_URL = BASE + "/zhengcehuobisi/125207/125227/125957/index.html"
-OUT_DIR = "《中国货币政策执行报告》"
+OUT_DIR = "中国货币政策执行报告"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 QUARTERS = {"一": "Q1", "二": "Q2", "三": "Q3", "四": "Q4"}
 NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
