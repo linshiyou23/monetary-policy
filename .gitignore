@@ -1,0 +1,9 @@
+# 原始研报 PDF 仅本地留存，不上传仓库
+sources/
+*.pdf
+
+# 系统与编辑器杂项
+Thumbs.db
+.DS_Store
+Desktop.ini
+~$*
