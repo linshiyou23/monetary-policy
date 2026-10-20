@@ -20,11 +20,13 @@
 
 三篇整理另有独立 HTML 版本，入口为 `index.html`：
 
+公开地址：[货币政策分析框架](https://monetary-policy-015.pages.dev/)。Cloudflare Pages 连接本仓库的 `main` 分支，后续推送会自动更新网页。
+
 - `site/framework.html` — 现行货币政策框架
 - `site/evolution.html` — 货币政策框架的演变
 - `site/stages.html` — 经济发展阶段与货币政策
 
-仓库连接 Cloudflare Pages 即可生成公开分享链接（框架选 None，构建输出目录填 `/`）。
+部署使用 Cloudflare Pages，框架预设为 None，站点文件位于仓库根目录。
 
 ## 目录结构
 
