@@ -21,11 +21,17 @@ import glob
 import os
 import re
 import sys
+import time
 
 import pymupdf
 
 REPORT_DIR = "中国货币政策执行报告"
 OUT_SUB = "专栏文章"
+PDF_SUB = "专栏文章PDF"
+# 人工补录：文本模式下版式无法判定、需按原件补入的段落（键为 (期次, 专栏号)）。
+# 2003Q2 专栏4 曾在此补录"三、中国债券市场展望"，收束规则改进后可自然完整
+# 提取，已移除；如日后发现新的截断案例，在此登记补录文本。
+SUPPLEMENTS = {}
 HEADING = re.compile(r"^专\s*栏\s*([0-9０-９一二三四五六七八九十]+)\s*[:：、]?\s*(.*)$")
 LEADER = re.compile(r"\.{4,}|…+")
 CN_NUM = {"一": "1", "二": "2", "三": "3", "四": "4", "五": "5",
@@ -97,8 +103,10 @@ def page_lines(page):
             if not text:
                 continue
             mode = max(counts, key=counts.get) if cjk else "other"
-            x0, y0 = l["bbox"][0], l["bbox"][1]
-            rows.append({"y": y0, "x0": x0, "size": size, "text": text, "mode": mode})
+            x0, y0, x1, y1 = l["bbox"]
+            rows.append({"y": y0, "x0": x0, "x1": x1, "y1": y1,
+                         "w": page.rect.width, "size": size,
+                         "text": text, "mode": mode})
     rows.sort(key=lambda r: (round(r["y"], 1), r["x0"]))
     return rows
 
@@ -155,8 +163,18 @@ def has_body_heading(lines):
     return any(HEADING.match(r["text"]) and not is_toc_line(r["text"]) for r in lines)
 
 
-def next_page_continues(pages, p, colfont):
-    """下一页开头若干实质行是否仍为专栏字体（跨页继续），或下一页有新专栏标题。"""
+def looks_like_maintext(r, col_size):
+    """全宽、字号不小于专栏正文的 0.93 倍、起印于版心左缘 => 主文段落行。
+    图表标签（短）、表格单元格（短/小字）、脚注（小字）、缩进的栏内内容均排除。"""
+    return ((r["x1"] - r["x0"]) > 0.5 * r["w"]
+            and r["size"] >= col_size * 0.93
+            and r["x0"] < 0.17 * r["w"])
+
+
+def next_page_continues(pages, p, colfont, col_size):
+    """按顺序扫描次页，判断本文是否跨页继续：先遇到本文楷体行 => 继续；
+    先遇到主文段落行或下一篇专栏标题 => 止于本页。
+    次页开头的图表残行（短小、非专栏字体）不影响判断。"""
     if p + 1 >= len(pages):
         return False
     seen = 0
@@ -165,23 +183,48 @@ def next_page_continues(pages, p, colfont):
         if not t or is_pagenum(t):
             continue
         seen += 1
-        if seen > 6:
+        if seen > 40:
             break
-        if r["mode"] == colfont or (HEADING.match(t) and not is_toc_line(t)):
+        if HEADING.match(t) and not is_toc_line(t):
+            return False
+        if r["mode"] == colfont:
             return True
+        if looks_like_maintext(r, col_size):
+            return False
     return False
 
 
-def column_end(pages, pno, li, colfont, main_sec=0):
+def column_end(pages, pno, li, colfont, col_size, main_sec=0):
     """从标题行下一行起扫描，返回 (end_pno, end_li)：专栏正文结束位置（不含）。
 
-    字体模式（colfont != 'body'）：专栏内图表混入主文字体行不中断；仅当其后
-    同页无专栏字体、且下一页开头也不是专栏字体（主文确已恢复）时收束。
-    文本模式（colfont == 'body'，2002—2003 年宋体版式）：专栏内部也可能有
-    "一、二、"小标题，与主文节标题无字体差别，故收束于编号为 main_sec+1 的
-    节标题（主文节号接续）或"第X部分"行；编号不接续的视为专栏内部小标题。"""
+    字体模式（colfont != 'body'）：专栏内图表混入主文字体行不中断；主文节标题
+    （第X部分/一、）字号明显大于专栏正文（如 15pt 对 12pt）时收束；非专栏字体
+    行之后、下一个专栏标题之前若无专栏字体行，即主文恢复，就地收束——同页后
+    文中下一篇专栏的楷体不作为本文延续；最后才考虑"次页开头是否有专栏字体"
+    的跨页继续。文本模式（colfont == 'body'，2002—2003 年宋体版式）：专栏
+    内部小标题与主文节标题完全无版式差别；收束于下一个专栏标题（或"第X部分"）
+    之前、编号为 main_sec+1 的最后一个节标题行——专栏内部小标题从一重新编号，
+    与主文节号撞车时主文必然重复出现同号，取最后一个。"""
     p, i = pno, li + 1
-    textmode = colfont == "body"
+    if colfont == "body":
+        end = None
+        while p < len(pages):
+            lines = pages[p]
+            while i < len(lines):
+                t = lines[i]["text"].strip()
+                if not t or is_pagenum(t):
+                    i += 1
+                    continue
+                m = HEADING.match(t)
+                if (m and not is_toc_line(t)) or (t.startswith("第") and "部分" in t[:6]):
+                    return end if end else (p, i)
+                ms = SEC_NUM.match(t)
+                if ms and cn_int(ms.group(1)) == main_sec + 1:
+                    end = (p, i)
+                i += 1
+            p += 1
+            i = 0
+        return end if end else (len(pages) - 1, len(pages[-1]))
     while p < len(pages):
         lines = pages[p]
         while i < len(lines):
@@ -193,24 +236,25 @@ def column_end(pages, pno, li, colfont, main_sec=0):
             m = HEADING.match(t)
             if m and not is_toc_line(t):
                 return p, i
-            if textmode:
-                if t.startswith("第") and "部分" in t[:6]:
-                    return p, i
-                ms = SEC_NUM.match(t)
-                if ms and cn_int(ms.group(1)) == main_sec + 1:
-                    return p, i
-                i += 1
-                continue
             if r["mode"] == colfont:
                 i += 1
                 continue
-            if any(x["mode"] == colfont and not HEADING.match(x["text"])
-                   for x in lines[i + 1:]):
-                i += 1
+            if r["mode"] != colfont and looks_like_maintext(r, col_size):
+                return p, i  # 主文段落行（全宽、主文字号、版心左缘）：专栏已结束
+            if SECTION.match(t) and r["size"] > col_size * 1.12:
+                return p, i
+            # 向后看本页：以下一个专栏标题为界（标题后属于下一篇）
+            nxt = len(lines)
+            for j in range(i + 1, len(lines)):
+                if HEADING.match(lines[j]["text"]) and not is_toc_line(lines[j]["text"]):
+                    nxt = j
+                    break
+            gap = lines[i + 1:nxt]
+            if any(x["mode"] == colfont and not HEADING.match(x["text"]) for x in gap):
+                i += 1  # 本页其后仍是本文内容（图表行等），跳过继续
                 continue
-            if next_page_continues(pages, p, colfont):
-                p, i = p + 1, 0
-                continue
+            if next_page_continues(pages, p, colfont, col_size):
+                break  # 跳出内层循环，由外层翻页并重取行列表
             return p, i
         p += 1
         i = 0
@@ -243,8 +287,8 @@ def scan_gap(pages, start_pos, end_pos):
 
 
 def detect_colfont(pages, pno, li):
-    """标题行之后若干实质行的主导中文字体类别，作为专栏正文字体。"""
-    counts = {}
+    """标题行之后若干实质行的主导中文字体类别及其字号，作为专栏正文字体。"""
+    counts, sizes = {}, {}
     seen = 0
     for r in pages[pno][li + 1:]:
         t = r["text"].strip()
@@ -255,9 +299,11 @@ def detect_colfont(pages, pno, li):
             break
         n = sum(1 for ch in t if "\u4e00" <= ch <= "\u9fff")
         counts[r["mode"]] = counts.get(r["mode"], 0) + n
+        sizes[r["mode"]] = sizes.get(r["mode"], 0) + r["size"] * n
     if not counts or max(counts, key=counts.get) == "other":
-        return "kai"
-    return max(counts, key=counts.get)
+        return "kai", 12.0
+    mode = max(counts, key=counts.get)
+    return mode, sizes[mode] / counts[mode]
 
 
 def reflow(lines):
@@ -284,11 +330,55 @@ def safe_name(title):
     return t[:60] if len(t) > 60 else t
 
 
+def column_pdf(src_path, out_path, pages, pno, li, ep, ei):
+    """把专栏所在页面裁剪成独立 PDF：首页裁去专栏上方主文，末页裁去下方主文，
+    中间页整页保留；图表、表格随原版面完整保留。裁剪线取专栏边界行与相邻
+    主文行的几何中点，避免残留半行文字。"""
+    src = pymupdf.open(src_path)
+    out = pymupdf.open()
+    out.insert_pdf(src, from_page=pno, to_page=ep)
+    head = pages[pno][li]
+    start_lines = pages[pno]
+    if li > 0:
+        top = max((start_lines[li - 1]["y1"] + head["y"]) / 2, 0)
+    else:
+        top = max(head["y"] - 14, 0)
+    if ei > 0:
+        last = pages[ep][ei - 1]
+        end_lines = pages[ep]
+        bottom = last["y1"] + 10
+        if ei < len(end_lines):  # 与下方主文行保持距离
+            bottom = min(bottom + 2, (last["y1"] + end_lines[ei]["y"]) / 2 + 4)
+    else:
+        last = pages[ep - 1][-1]
+        bottom = min(last["y1"] + 10, src[ep].rect.height)
+    bottom = min(bottom, src[ep].rect.height)
+    width = src[pno].rect.width
+    if pno == ep:
+        out[0].set_cropbox(pymupdf.Rect(0, top, width, bottom))
+    else:
+        out[0].set_cropbox(pymupdf.Rect(0, top, width, src[pno].rect.height))
+        out[-1].set_cropbox(pymupdf.Rect(0, 0, width, bottom))
+    for k in range(3):  # Windows 下目标文件可能被查看器/杀毒/索引器锁定
+        try:
+            out.ez_save(out_path)
+            out.close()
+            src.close()
+            return True
+        except Exception:
+            time.sleep(1.5)
+    out.close()
+    src.close()
+    return False
+
+
 def main():
     dry = "--dry-run" in sys.argv
+    pdf_dir = os.path.join(REPORT_DIR, PDF_SUB)
     pdfs = sorted(glob.glob(os.path.join(REPORT_DIR, "*Q*_中国货币政策执行报告.pdf")))
     if not dry:
         os.makedirs(os.path.join(REPORT_DIR, OUT_SUB), exist_ok=True)
+        os.makedirs(pdf_dir, exist_ok=True)
     rows, notes = [], []
     for pdf in pdfs:
         tag = os.path.basename(pdf).split("_")[0]
@@ -302,8 +392,11 @@ def main():
         prev_end = (0, 0)
         for pno, li, num, title_raw in heads:
             sec_no = scan_gap(pages, prev_end, (pno, li))
-            colfont = detect_colfont(pages, pno, li)
-            ep, ei = column_end(pages, pno, li, colfont, sec_no)
+            colfont, col_size = detect_colfont(pages, pno, li)
+            ep, ei = column_end(pages, pno, li, colfont, col_size, sec_no)
+            if ei == 0 and ep > pno:
+                # 主文在次页页首恢复：专栏止于上一页底，PDF 页范围回收一页
+                ep, ei = ep - 1, len(pages[ep - 1])
             prev_end = (ep, ei)
             title = clean_title(title_raw)
             for tn, tt in toc:  # 目录标题优先：前缀一致（含少量断字）时取更全者
@@ -331,25 +424,32 @@ def main():
             if dry:
                 print(f"    专栏{num} [{npage}页|{colfont}] {title} ({chars}字)")
                 continue
-            fname = f"{tag}_专栏{num}_{safe_name(title)}.md"
+            supp = SUPPLEMENTS.get((tag, num))
+            note = supp["note"] if supp else None
+            paras2 = paras + (supp["paras"] if supp else [])
+            base = f"{tag}_专栏{num}_{safe_name(title)}"
             text = (
                 f"# {title}\n\n"
                 f"> 摘自《中国货币政策执行报告》{tag} 专栏 {num}（PDF 第 {npage} 页）\n"
-                f"> 自动按原件版式提取，正文未改写；图表内容以原件为准。\n\n"
-                + "\n\n".join(paras)
-                + "\n"
+                f"> 原文全文（含图表）：../{PDF_SUB}/{base}.pdf\n"
+                f"> 自动按原件版式提取，正文未改写；图表数据以 PDF 原件为准。\n"
+                + (f"> {note}\n" if note else "")
+                + "\n" + "\n\n".join(paras2) + "\n"
             )
-            with open(os.path.join(REPORT_DIR, OUT_SUB, fname), "w", encoding="utf-8") as f:
+            with open(os.path.join(REPORT_DIR, OUT_SUB, base + ".md"), "w", encoding="utf-8") as f:
                 f.write(text)
+            if not column_pdf(pdf, os.path.join(pdf_dir, base + ".pdf"), pages, pno, li, ep, ei):
+                notes.append(f"{tag} 专栏{num}: PDF 被其他程序占用，未能更新（关闭查看器后重跑可补）")
             rows.append({
                 "issue": tag, "column_no": num, "title": title,
-                "pdf_pages": npage, "chars": chars, "file": fname,
+                "pdf_pages": npage, "chars": sum(len(p) for p in paras2),
+                "file": base + ".md", "pdf_file": base + ".pdf",
             })
         print(f"{tag}: {len(heads)} 篇专栏")
     if not dry:
         idx = os.path.join(REPORT_DIR, f"{OUT_SUB}_index.csv")
         with open(idx, "w", newline="", encoding="utf-8-sig") as f:
-            w = csv.DictWriter(f, fieldnames=["issue", "column_no", "title", "pdf_pages", "chars", "file"])
+            w = csv.DictWriter(f, fieldnames=["issue", "column_no", "title", "pdf_pages", "chars", "file", "pdf_file"])
             w.writeheader()
             w.writerows(rows)
         print(f"\n索引已写入 {idx}，共 {len(rows)} 篇")
