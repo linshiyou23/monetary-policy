@@ -37,16 +37,18 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 @media print { body { background:#fff; padding:0; } main { border:none; padding:0; margin:0; max-width:none; } footer { display:none; } }
 @media (max-width: 640px) { main { padding: 24px 16px; } table { display: block; overflow-x: auto; } }
 
-/* 悬停批注（出处＋报告原文摘录） */
-.a { position: relative; border-bottom: 1px dotted #6d95c9; cursor: help; }
-.a > .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+/* 悬停批注（出处＋报告原文摘录）：句子与表格行共用气泡样式 */
+.a { position: relative; cursor: help; }
+.a-row { cursor: help; }
+.a-row td:first-child { position: relative; }
+.a > .pop, .a-row .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
   width: min(560px, 82vw); padding: 10px 14px; background: #fffdf3; border: 1px solid #d9c78f;
   border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); font-size: 13.5px; line-height: 1.8;
   color: #4a3f24; text-align: left; cursor: auto; }
-.a:hover > .pop, .a:focus > .pop { display: block; }
-.a > .pop .src { color: var(--accent); font-weight: 600; }
+.a:hover > .pop, .a:focus > .pop, .a-row:hover .pop, .a-row:focus .pop { display: block; }
+.pop .src { color: var(--accent); font-weight: 600; }
 .cite-badge { font-size: 13px; color: var(--muted); }
-@media print { .a > .pop { display: none !important; } .a { border-bottom: none; } }
+@media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
 </head>
 <body>
@@ -55,7 +57,7 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <blockquote>
 <p>资料来源：红塔证券《流动性分析手册》系列一至六（李奇霖、孙永乐，2022 年 1—7 月）。
 框架状态以报告基准时点（2022 年上半年）为准，未补充此后变化。
-出处不再写在正文括号里：鼠标悬停在带虚线下划线的句子上，即可查看出处与报告原文摘录（如“手册一 §2.1.1”指《手册一：初识央行资产负债表》第 2.1.1 节）。</p>
+出处以悬停批注显示：鼠标悬停在句子或表格行上，即可查看出处与报告原文摘录（如“手册一 §2.1.1”指《手册一：初识央行资产负债表》第 2.1.1 节）。</p>
 </blockquote>
 <hr />
 <h2>1. 总纲：二级银行体系与货币创造</h2>
@@ -154,34 +156,29 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <tr>
 <th>工具</th>
 <th>要点</th>
-<th>出处</th>
+
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>法定存款准备金率</td>
+<tr class="a-row" tabindex="0">
+<td>法定存款准备金率<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.29、p.30）<br>原文：“2019 年，央行推出了“三档两优存款准备金”制度，即央行将所有商业银行划分为大、中、小大类银行，并针对不同类型的银行设定对应的准备金率。……截至2021 年末，金融机构平均法定存款准备金率仅为8.4%，较2018年初降低6.5 个百分点。”</span></td>
 <td>"三档两优"框架：大/中/小型银行三档基础费率＋普惠金融等定向优惠（0.5—1.5 个百分点）；2021 年末加权平均法定准备金率 8.4%；全面降准信号强，近年更常用定向降准</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>逆回购（OMO）</td>
+<tr class="a-row" tabindex="0">
+<td>逆回购（OMO）<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33、p.32）<br>原文：“回购业务（现在是指逆回购）1994年7、14、28、63天等国债、政策性银行债一级交易商包括正回购和逆回购，2015年之后特指逆回购，是央行投放短期资金，平滑市场流动性的主要工具……另一方面，随着中国货币政策框架逐渐从数量型向价格型转变，OMO 利率逐渐成为央行的短期政策利率。”</span></td>
 <td>每日操作，期限 7/14/28 天，质押国债、政策性银行债；平滑纳税高峰、跨季跨年等时点；7 天逆回购利率为短期政策利率</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>MLF</td>
+<tr class="a-row" tabindex="0">
+<td>MLF<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.31）<br>原文：“后来，央行为了加大对小微企业、绿色经济等领域的支持力度，开始将不低于AA 级的小微企业、绿色和“三农”金融债券，AA+、AA 级公司信用类债券，优质的小微企业贷款和绿色贷款等纳入抵押品范围。目前，央行已经形成了在每个月月中进行中期借贷便利操作的惯例，且期限都是1 年期的。”</span></td>
 <td>每月月中操作，现惯例化为 1 年期；质押合格债券（2018 年拓展至 AA 级小微/绿色/三农金融债、优质小微和绿色贷款等）；观察重点是利率而非数量</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>再贴现</td>
+<tr class="a-row" tabindex="0">
+<td>再贴现<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“再贴现1986年3、6、12个月符合要求的信贷资产金融机构在完善货币政策传导机制、促进信贷结构调整、引导扩大企业融资、推动票据市场发展等方面发挥了重要作用”</span></td>
 <td>1986 年创设，期限 3/6/12 个月，以符合要求的信贷资产为标的</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>国库现金定存</td>
+<tr class="a-row" tabindex="0">
+<td>国库现金定存<span class="pop"><span class="src">出处：手册一 §2.2.2；手册六 §2.3</span>（手册一 p.36）<br>原文：“自2006 年开始，央行出于提高中央国库现金使用效益，加强财政政策与货币政策的协调配合等方面的考虑，开始开展中央国库现金管理商业银行定期存款业务。即央行通过招标等方式，将政府存款放在商业银行账户上，以获取利息收入。所以央行开展国库定期存款是向商业银行投放流动性，反之定期存款到期则体现为回笼市场流动性。”</span></td>
 <td>2006 年启动，财政部招标存放商业银行＝投放流动性、到期＝回笼</td>
-<td>手册一 §2.2.2；手册六 §2.3</td>
 </tr>
 </tbody>
 </table>
@@ -191,29 +188,25 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <tr>
 <th>工具</th>
 <th>要点</th>
-<th>出处</th>
+
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>再贷款家族</td>
+<tr class="a-row" tabindex="0">
+<td>再贷款家族<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.28）<br>原文：“第一，再贷款。再贷款简单来说就是央行给金融机构发放贷款，创设于1984 年，是央行最传统的货币政策工具之一。在1994 年之前，再贷款一直是央行投放基础货币的主要渠道。……但是近年来，再贷款作为结构性货币政策工具，再次被央行频繁地使用。现在新增再贷款主要被用于促进信贷结构调整，逐渐成为央行定向支持小微企业、农业、煤炭清洁利用、区域协调等诸多领域的重要工具。”</span></td>
 <td>1984 年创设的最传统工具，1994 年前曾是基础货币主渠道，近年以结构性身份重启：支农、支小、抗疫专项、区域协调、煤炭清洁高效利用专项等；支小再贷款规模持续扩张</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>"先贷后借"直达机制</td>
+<tr class="a-row" tabindex="0">
+<td>"先贷后借"直达机制<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.28）<br>原文：““先贷后借”简单来说就是要求商业银行先发放符合条件的贷款，再从央行手上获得再贷款资金，与“先借后贷”模式向反（即央行先给钱，银行再放贷）。……但是“先贷后借”模式下，央行是先让商业银行进行信用派生，之后再向银行投放基础货币。相比于之前的模式，这种信贷派生模式的效率无疑会更高。”</span></td>
 <td>银行先放贷、再向央行领钱，可事前审核；把"央行先给基础货币→银行信用派生"的传统链条倒置，信贷派生效率更高</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>碳减排支持工具</td>
+<tr class="a-row" tabindex="0">
+<td>碳减排支持工具<span class="pop"><span class="src">出处：手册三 §3.1；手册二 §3</span>（手册三 p.29；手册二 p.26）<br>原文：“第二，碳减排支持工具。2021 年11 月央行推出了碳减排支持工具，重点用于支持清洁能源、节能环保和碳减排技术三个碳减排领域。……央行通过“先贷后借”的直达机制，对金融机构向碳减排重点领域内相关企业发放的符合条件的碳减排贷款，按贷款本金的60%提供资金支持，利率为1.75%。”</span></td>
 <td>2021 年 11 月推出，支持清洁能源、节能环保、碳减排技术三大领域；"先贷后借"，按贷款本金的 60% 提供资金，利率 1.75%，期限 1 年、可展期 2 次；标志信用派生的抵押品基础从房地产、土地转向绿色与制造业</td>
-<td>手册三 §3.1；手册二 §3</td>
 </tr>
-<tr>
-<td>两项直达工具（2020.6 设立，2022 年初接续转换）</td>
+<tr class="a-row" tabindex="0">
+<td>两项直达工具（2020.6 设立，2022 年初接续转换）<span class="pop"><span class="src">出处：手册三 §3.1；手册二 §3</span>（手册二 p.26）<br>原文：“比如在2020 年疫情爆发的时候，推出了普惠小微企业贷款延期支持工具和普惠小微企业信用贷款支持计划两项直达实体经济的货币政策工具。并在2022 年初的时候将“普惠小微企业贷款延期支持工具”转换为“普惠小微贷款支持工具”；将“普惠小微企业信用贷款支持计划”并入“支农支小再贷款”管理。”</span></td>
 <td>普惠小微贷款延期还本付息→转为"普惠小微贷款支持工具"（按普惠小微贷款余额增量的 1% 提供资金）；信用贷款支持计划→并入支农支小再贷款管理</td>
-<td>手册三 §3.1；手册二 §3</td>
 </tr>
 </tbody>
 </table>
@@ -342,7 +335,7 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
     pop.style.display = '';
     pop.style.position = '';
   }
-  document.querySelectorAll('.a').forEach(function (el) {
+  document.querySelectorAll('.a, .a-row').forEach(function (el) {
     el.addEventListener('mouseenter', function () { place(el); });
     el.addEventListener('focus', function () { place(el); });
     el.addEventListener('mouseleave', function () { hide(el); });

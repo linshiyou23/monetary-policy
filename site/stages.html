@@ -37,16 +37,18 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 @media print { body { background:#fff; padding:0; } main { border:none; padding:0; margin:0; max-width:none; } footer { display:none; } }
 @media (max-width: 640px) { main { padding: 24px 16px; } table { display: block; overflow-x: auto; } }
 
-/* 悬停批注（出处＋报告原文摘录） */
-.a { position: relative; border-bottom: 1px dotted #6d95c9; cursor: help; }
-.a > .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+/* 悬停批注（出处＋报告原文摘录）：句子与表格行共用气泡样式 */
+.a { position: relative; cursor: help; }
+.a-row { cursor: help; }
+.a-row td:first-child { position: relative; }
+.a > .pop, .a-row .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
   width: min(560px, 82vw); padding: 10px 14px; background: #fffdf3; border: 1px solid #d9c78f;
   border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); font-size: 13.5px; line-height: 1.8;
   color: #4a3f24; text-align: left; cursor: auto; }
-.a:hover > .pop, .a:focus > .pop { display: block; }
-.a > .pop .src { color: var(--accent); font-weight: 600; }
+.a:hover > .pop, .a:focus > .pop, .a-row:hover .pop, .a-row:focus .pop { display: block; }
+.pop .src { color: var(--accent); font-weight: 600; }
 .cite-badge { font-size: 13px; color: var(--muted); }
-@media print { .a > .pop { display: none !important; } .a { border-bottom: none; } }
+@media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
 </head>
 <body>
@@ -55,7 +57,7 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <blockquote>
 <p>资料来源：红塔证券《流动性分析手册》系列一至六（李奇霖、孙永乐，2022 年 1—7 月）。
 本篇以<strong>经济发展阶段</strong>为轴：每个阶段讲"经济图景 → 金融结构变化 → 对应的货币政策框架特征"。框架自身的时间线见《整理二》。
-出处以悬停批注显示：鼠标悬停在带虚线下划线的句子上，即可查看出处与报告原文摘录。报告未覆盖 2022 年下半年之后，各阶段的终点即报告撰写时点。</p>
+出处以悬停批注显示：鼠标悬停在句子或表格行上，即可查看出处与报告原文摘录。报告未覆盖 2022 年下半年之后，各阶段的终点即报告撰写时点。</p>
 </blockquote>
 <hr />
 <h2>总览：六阶段对照表</h2>
@@ -240,7 +242,7 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
     pop.style.display = '';
     pop.style.position = '';
   }
-  document.querySelectorAll('.a').forEach(function (el) {
+  document.querySelectorAll('.a, .a-row').forEach(function (el) {
     el.addEventListener('mouseenter', function () { place(el); });
     el.addEventListener('focus', function () { place(el); });
     el.addEventListener('mouseleave', function () { hide(el); });

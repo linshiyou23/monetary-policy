@@ -37,16 +37,18 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 @media print { body { background:#fff; padding:0; } main { border:none; padding:0; margin:0; max-width:none; } footer { display:none; } }
 @media (max-width: 640px) { main { padding: 24px 16px; } table { display: block; overflow-x: auto; } }
 
-/* 悬停批注（出处＋报告原文摘录） */
-.a { position: relative; border-bottom: 1px dotted #6d95c9; cursor: help; }
-.a > .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+/* 悬停批注（出处＋报告原文摘录）：句子与表格行共用气泡样式 */
+.a { position: relative; cursor: help; }
+.a-row { cursor: help; }
+.a-row td:first-child { position: relative; }
+.a > .pop, .a-row .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
   width: min(560px, 82vw); padding: 10px 14px; background: #fffdf3; border: 1px solid #d9c78f;
   border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); font-size: 13.5px; line-height: 1.8;
   color: #4a3f24; text-align: left; cursor: auto; }
-.a:hover > .pop, .a:focus > .pop { display: block; }
-.a > .pop .src { color: var(--accent); font-weight: 600; }
+.a:hover > .pop, .a:focus > .pop, .a-row:hover .pop, .a-row:focus .pop { display: block; }
+.pop .src { color: var(--accent); font-weight: 600; }
 .cite-badge { font-size: 13px; color: var(--muted); }
-@media print { .a > .pop { display: none !important; } .a { border-bottom: none; } }
+@media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
 </head>
 <body>
@@ -55,7 +57,7 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <blockquote>
 <p>资料来源：红塔证券《流动性分析手册》系列一至六（李奇霖、孙永乐，2022 年 1—7 月）。
 本篇以<strong>框架自身的制度要素</strong>为轴，按六条主线各给一条时间线；经济发展阶段与政策的对应关系见《整理三》。
-出处以悬停批注显示：鼠标悬停在带虚线下划线的句子上，即可查看出处与报告原文摘录。个别年份口径说明：手册一原文将 SLO、MLF、PSL 均系于 2013 年，手册三明确 MLF、PSL 为 2014 年创设，本篇从手册三。</p>
+出处以悬停批注显示：鼠标悬停在句子或表格行上，即可查看出处与报告原文摘录。个别年份口径说明：手册一原文将 SLO、MLF、PSL 均系于 2013 年，手册三明确 MLF、PSL 为 2014 年创设，本篇从手册三。</p>
 </blockquote>
 <hr />
 <h2>总览：六条主线一览</h2>
@@ -149,34 +151,29 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <tr>
 <th>时间</th>
 <th>事件</th>
-<th>出处</th>
+
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>1996</td>
+<tr class="a-row" tabindex="0">
+<td>1996<span class="pop"><span class="src">出处：手册四 §3.5</span>（手册四 p.37）<br>原文：“第一个是Chibor 利率，即中国银行间同业拆借利率。1996 年，中国建立了全国统一的同业拆借网络。同年 6 月，银行间同业拆借利率管制放开。”</span></td>
 <td>建立全国统一同业拆借网络，同年 6 月放开拆借利率管制（Chibor 诞生）</td>
-<td>手册四 §3.5</td>
 </tr>
-<tr>
-<td>2007</td>
+<tr class="a-row" tabindex="0">
+<td>2007<span class="pop"><span class="src">出处：手册四 §3.5</span>（手册四 p.37）<br>原文：“2007 年Shibor 利率，即上海银行间同业拆放利率正式推出了。其借鉴了 Libor 的经验，以报价制为基础，每个交易日根据18 家报价行的报价，剔除最高、最低各4 家报价后，对其余报价进行算术平均计算后得出。”</span></td>
 <td>推出 Shibor（18 家报价行），建立报价制基准利率</td>
-<td>手册四 §3.5</td>
 </tr>
-<tr>
-<td>2013</td>
+<tr class="a-row" tabindex="0">
+<td>2013<span class="pop"><span class="src">出处：手册三 §2.1</span>（手册三 p.22）<br>原文：“比如在2013年全面放开贷款利率和票据贴现利率管制，在2015 年放开存款利率管制。……LPR 利率早在2013 年就已经推出了，但是当时LPR 利率还存在不少问题：比如LPR 利率实际运用不足，虽然银行参与了LPR 报价，但是在实际运行中银行还是习惯于通过贷款基准利率来定价；再比如当时LPR 报价存在报价机构少、期限品种不全、报价频率过高等问题。”</span></td>
 <td>全面放开贷款利率和票据贴现利率管制；LPR 首次推出（但运用不足、报价机构少、期限品种不全）</td>
-<td>手册三 §2.1</td>
 </tr>
-<tr>
-<td>2015</td>
+<tr class="a-row" tabindex="0">
+<td>2015<span class="pop"><span class="src">出处：手册三 §2.1</span>（手册三 p.22、p.15）<br>原文：“所以在2012 年之后，国内一直在加快推进利率市场化改革，比如在2013年全面放开贷款利率和票据贴现利率管制，在2015 年放开存款利率管制。……更为重要的是在2015 年我国进行了新一轮的汇改。2015 年8 月央行考虑到中国经济增速相对较高、经常项目长期维持顺差、金融市场对外开放进程加快等因素，开始进一步推动汇率市场化。”</span></td>
 <td>放开存款利率管制；"8·11"汇改推进汇率市场化</td>
-<td>手册三 §2.1</td>
 </tr>
-<tr>
-<td>2014</td>
+<tr class="a-row" tabindex="0">
+<td>2014<span class="pop"><span class="src">出处：手册四 §3.2</span>（手册四 p.28）<br>原文：“出于多方面的考虑，在2014 年外汇交易中心推出了DR 系列利率（存款类机构质押回购利率）。相比于R 系列利率，DR 一来将交易机构限制在存款类金融机构之内；二来将抵押品限制在国债等利率债上。通过这样的方式，DR 系列利率在很大程度上降低了交易潜在的主体信用风险和抵押品信用风险。”</span></td>
 <td>外汇交易中心推出 DR 系列（存款类机构、利率债质押），压降主体与抵押品扰动</td>
-<td>手册四 §3.2</td>
 </tr>
 </tbody>
 </table>
@@ -211,27 +208,24 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <th>阶段</th>
 <th>中介目标</th>
 <th>说明</th>
-<th>出处</th>
+
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>数量型时期</td>
+<tr class="a-row" tabindex="0">
+<td>数量型时期<span class="pop"><span class="src">出处：手册三 §2.1</span>（手册三 p.19）<br>原文：“所以在数量型调控的框架下，央行的中介目标往往是M2 同比增速、社融同比增速等数量型指标。当时政策层也都会公布M2 的同比目标等。”</span></td>
 <td>公布 M2 目标增速</td>
 <td>直接锚定数量目标</td>
-<td>手册三 §2.1</td>
 </tr>
-<tr>
-<td>2012 年</td>
+<tr class="a-row" tabindex="0">
+<td>2012 年<span class="pop"><span class="src">出处：手册三 §2.1</span>（手册三 p.21）<br>原文：“此后，为了应对这一情况，央行提出社会融资规模同比增速指标，以此来更好地衡量实体从金融机构中获得的资金支持。2012 年“十二五规划”也表示在继续关注货币供应量、新增贷款等传统中间目标的同时，发挥社会融资规模在货币政策制定中的参考作用。”</span></td>
 <td>引入社会融资规模</td>
 <td>"十二五"规划明确其参考作用，应对 M2 有效性下降</td>
-<td>手册三 §2.1</td>
 </tr>
-<tr>
-<td>2019 年后（现行）</td>
+<tr class="a-row" tabindex="0">
+<td>2019 年后（现行）<span class="pop"><span class="src">出处：手册三 §2.2</span>（手册三 p.26）<br>原文：“三是基本匹配是一个长期的目标，考虑的是全年的问题，而不是每个月每个季度都要做到匹配。那么基本匹配的区间大概在什么范围呢？这里我们可以以2019 年为例，此前孙国峰司长表述，2019 年M2、社融增速和名义经济增速基本匹配。从这个角度来看的话，社融同比和名义GDP 同比的差值可能在3.4%左右，M2 同比和名义GDP 同比的差值可能在1%左右。”</span></td>
 <td>"M2 与社融增速同名义经济增速基本匹配"</td>
 <td>不是完全相等、不逐月匹配；经验参照：社融−名义 GDP 差约 3.4pct、M2−名义 GDP 差约 1pct</td>
-<td>手册三 §2.2</td>
 </tr>
 </tbody>
 </table>
@@ -247,49 +241,41 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <tr>
 <th>时间</th>
 <th>事件</th>
-<th>出处</th>
+
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>2009 年中</td>
+<tr class="a-row" tabindex="0">
+<td>2009 年中<span class="pop"><span class="src">出处：手册二 §1</span>（手册二 p.8）<br>原文：“人民银行从 2009 年中开始研究强化宏观审慎管理的政策措施，并于 2011 年正式引入差别准备金动态调整机制，其核心内容是金融机构适当的信贷增速取决于经济增长的合理需要及其自身的资本水平。”</span></td>
 <td>人民银行开始研究强化宏观审慎管理</td>
-<td>手册二 §1</td>
 </tr>
-<tr>
-<td>2011 年</td>
+<tr class="a-row" tabindex="0">
+<td>2011 年<span class="pop"><span class="src">出处：手册二 §1</span>（手册二 p.8）<br>原文：“人民银行从 2009 年中开始研究强化宏观审慎管理的政策措施，并于 2011 年正式引入差别准备金动态调整机制，其核心内容是金融机构适当的信贷增速取决于经济增长的合理需要及其自身的资本水平。”</span></td>
 <td>正式引入<strong>差别准备金动态调整机制</strong>（金融机构适当信贷增速取决于经济增长合理需要及自身资本水平）</td>
-<td>手册二 §1</td>
 </tr>
-<tr>
-<td>2015 年末/2016 年</td>
+<tr class="a-row" tabindex="0">
+<td>2015 年末/2016 年<span class="pop"><span class="src">出处：手册二 §1/§2.3</span>（手册二 p.19）<br>原文：“第一，宏观审慎评估体系（MPA）。2016 年央行在“差别准备金动态调整机制”的基础上推出了MPA 考核机制。简单来说MPA 从资本和杠杆情况、资产负债情况、流动性、定价行为、资产质量、跨境融资风险和信贷政策执行这七个方面对金融机构的行为进行引导。”</span></td>
 <td>升级为<strong>宏观审慎评估体系（MPA）</strong>，从资本和杠杆、资产负债、流动性、定价行为、资产质量、跨境融资风险、信贷政策执行七个维度考核</td>
-<td>手册二 §1/§2.3</td>
 </tr>
-<tr>
-<td>2016 年 12 月</td>
+<tr class="a-row" tabindex="0">
+<td>2016 年 12 月<span class="pop"><span class="src">出处：手册二 §2.2</span>（手册二 p.17）<br>原文：“之后2016 年的中央经济工作会议更是强调要把防范化解金融风险放到更重要的位置，此后以资管新规为代表的一系列政策监管文件层出不穷。”</span></td>
 <td>中央经济工作会议把防范化解金融风险放到更重要位置</td>
-<td>手册二 §2.2</td>
 </tr>
-<tr>
-<td>2017 年</td>
+<tr class="a-row" tabindex="0">
+<td>2017 年<span class="pop"><span class="src">出处：手册二 §2.2</span>（手册二 p.17）<br>原文：“之后2016 年的中央经济工作会议更是强调要把防范化解金融风险放到更重要的位置，此后以资管新规为代表的一系列政策监管文件层出不穷。比如在2017 年监管将表外理财纳入MPA 广义信贷口径，并不断完善宏观审慎监管。”</span></td>
 <td><strong>表外理财纳入 MPA 广义信贷口径</strong>；以资管新规为代表的一批监管文件随后落地</td>
-<td>手册二 §2.2</td>
 </tr>
-<tr>
-<td>2019 年</td>
+<tr class="a-row" tabindex="0">
+<td>2019 年<span class="pop"><span class="src">出处：手册二 §2.3</span>（手册二 p.22）<br>原文：“比如2019 年央行发文表示服务县域的农村商业银行应将降准资金全部用于发放民营企业和小微企业贷款，加强当地县域金融服务。人民银行将相关情况纳入宏观审慎评估（MPA）考核。”</span></td>
 <td>要求服务县域农商行将降准资金全部投放民企小微并纳入 MPA 考核</td>
-<td>手册二 §2.3</td>
 </tr>
-<tr>
-<td>2020 年</td>
+<tr class="a-row" tabindex="0">
+<td>2020 年<span class="pop"><span class="src">出处：手册二 §2.3</span>（手册二 p.22）<br>原文：“比如在2020 年央行发布了《关于建立逆周期资本缓冲机制的通知》，明确了我国逆周期资本缓冲的计提方式、覆盖范围及评估机制。 ……再比如在2020 年12 月，央行发布《关于建立银行业金融机构房地产贷款集中度管理制度的通知》。”</span></td>
 <td>建立<strong>逆周期资本缓冲机制</strong>；12 月建立<strong>房地产贷款集中度管理制度</strong></td>
-<td>手册二 §2.3</td>
 </tr>
-<tr>
-<td>2021 年</td>
+<tr class="a-row" tabindex="0">
+<td>2021 年<span class="pop"><span class="src">出处：手册二 §2.3/§1</span>（手册二 p.22）<br>原文：“同时，在2021 年央行发布《系统重要性银行附加监管规定（试行）》，对于系统性重要银行在资本金等方面提出了更高的要求。……同时将系统重要性银行分为五组，第一组到第五组的银行分别适用0.25%、0.5%、0.75%、1%和1.5%的附加资本要求。”</span></td>
 <td>发布<strong>《系统重要性银行附加监管规定（试行）》</strong>（五组银行附加资本 0.25%—1.5%）；年末发布<strong>《宏观审慎政策指引（试行）》</strong>，对双支柱框架作系统性梳理</td>
-<td>手册二 §2.3/§1</td>
 </tr>
 </tbody>
 </table>
@@ -331,135 +317,114 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <th>工具</th>
 <th>创设时间</th>
 <th>演变/现状（报告时点）</th>
-<th>出处</th>
+
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>再贷款</td>
+<tr class="a-row" tabindex="0">
+<td>再贷款<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.28）<br>原文：“再贷款简单来说就是央行给金融机构发放贷款，创设于1984 年，是央行最传统的货币政策工具之一。在1994 年之前，再贷款一直是央行投放基础货币的主要渠道。此后，随着外汇占款时代的到来，才逐渐退出了历史舞台。”</span></td>
 <td>1984</td>
 <td>1994 年前为投放基础货币主渠道，外汇占款时代退出，近年以结构性工具身份重启</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>再贴现</td>
+<tr class="a-row" tabindex="0">
+<td>再贴现<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“再贴现1986年3、6、12个月符合要求的信贷资产金融机构在完善货币政策传导机制、促进信贷结构调整、引导扩大企业融资、推动票据市场发展等方面发挥了重要作用”</span></td>
 <td>1986</td>
 <td>3/6/12 个月，持续使用</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>回购（现逆回购）</td>
+<tr class="a-row" tabindex="0">
+<td>回购（现逆回购）<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“回购业务（现在是指逆回购）1994年7、14、28、63天等国债、政策性银行债一级交易商包括正回购和逆回购，2015年之后特指逆回购，是央行投放短期资金，平滑市场流动性的主要工具”</span></td>
 <td>1994</td>
 <td>7/14/28 天，每日操作，7 天利率为短期政策利率</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>现券买卖</td>
+<tr class="a-row" tabindex="0">
+<td>现券买卖<span class="pop"><span class="src">出处：手册一 §2.1.2</span>（手册一 p.21）<br>原文：“比如在2000-2003年的时候，当时央行为了调节市场流动性，多次在债券市场上进行现券买卖。2001 年的货币政策执行报告就明确提到，在当年央行公开市场操作方式中，现券的交易量明显增加。 但是随着货币政策工具箱的逐渐完善同时可能出于财政政策和货币政策分离等方面的考虑，近年来央行几乎不会使用现券交易这一政策工具。 ”</span></td>
 <td>2000—2003 多次操作</td>
 <td>近年几乎不再使用</td>
-<td>手册一 §2.1.2</td>
 </tr>
-<tr>
-<td>央票（在岸）</td>
+<tr class="a-row" tabindex="0">
+<td>央票（在岸）<span class="pop"><span class="src">出处：手册一 §2.2.4</span>（手册一 p.41）<br>原文：“从规模上看，央票规模从2002 年末的1487 亿快速增长到了2010 年8月的4.7 万亿，占比从2.9%提高到了19.2%。……央行开始逐渐减少央票的使用，并在2014 年停止发行新增央票。 随着前期票据的逐渐到期，央票的规模快速走低，到2017 年6 月，前期发行的票据已经全部到期，发行债券规模也变为0。”</span></td>
 <td>2002</td>
 <td>对冲外汇占款；2010 年 8 月峰值 4.7 万亿；<strong>2014 年停发新增</strong>，2017 年 6 月存量清零</td>
-<td>手册一 §2.2.4</td>
 </tr>
-<tr>
-<td>央票（离岸）</td>
+<tr class="a-row" tabindex="0">
+<td>央票（离岸）<span class="pop"><span class="src">出处：手册一 §2.2.4</span>（手册一 p.41）<br>原文：“一直到2018 年11 月，央行出于稳定人民币汇率等方面的考虑，开始在香港发行离岸央票。不过离岸央票的发行规模很小，目前已经逐渐形成常态化发行机制，每期规模都在50 亿左右。 ”</span></td>
 <td>2018.11</td>
 <td>为稳汇率在港发行、常态化，每期约 50 亿</td>
-<td>手册一 §2.2.4</td>
 </tr>
-<tr>
-<td>国库现金定存</td>
+<tr class="a-row" tabindex="0">
+<td>国库现金定存<span class="pop"><span class="src">出处：手册一 §2.2.2</span>（手册一 p.36）<br>原文：“自2006 年开始，央行出于提高中央国库现金使用效益，加强财政政策与货币政策的协调配合等方面的考虑，开始开展中央国库现金管理商业银行定期存款业务。即央行通过招标等方式，将政府存款放在商业银行账户上，以获取利息收入。”</span></td>
 <td>2006</td>
 <td>财政部月度招标，持续使用</td>
-<td>手册一 §2.2.2</td>
 </tr>
-<tr>
-<td>正回购</td>
+<tr class="a-row" tabindex="0">
+<td>正回购<span class="pop"><span class="src">出处：手册一 §2.2.6</span>（手册一 p.43）<br>原文：“在外汇占款时期，特别是在2006 年到2011 年的时候，为了应对国内市场上多余的流动性，央行也加大了正回购规模。……不过在2014 年之后，央行就已经不再进行正回购操作了。”</span></td>
 <td>（早期）</td>
 <td>2006—2011 年加大使用回笼流动性；<strong>2014 年后不再操作</strong></td>
-<td>手册一 §2.2.6</td>
 </tr>
-<tr>
-<td>SLO</td>
+<tr class="a-row" tabindex="0">
+<td>SLO<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“流动性调节工具（SLO）2013年1-7天未明确规定一级交易商中具有系统重要性、资产状况良好、政策传导能力强的部分金融机构是公开市场常规操作的必要补充，2016年之后就没有进行任何操作”</span></td>
 <td>2013</td>
 <td>1—7 天超短期；2016 年后无操作</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>SLF</td>
+<tr class="a-row" tabindex="0">
+<td>SLF<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“常备借贷便利（SLF）2013年隔夜、7天、1-3个月高信用评级的债券类资产及优质信贷资产等政策性银行和全国性商业银行由金融机构主动发起，是中央银行与金融机构        “一对一”交易，针对性强”</span></td>
 <td>2013</td>
 <td>隔夜/7 天/1—3 个月，利率走廊上限</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>同业存单（银行负债工具，央行 2013 年推出）</td>
+<tr class="a-row" tabindex="0">
+<td>同业存单（银行负债工具，央行 2013 年推出）<span class="pop"><span class="src">出处：手册四 §3.4；手册五 §02</span>（手册五 p.12）<br>原文：“比如我们可以看到在2013年的时候，央行发布了《同业存单管理暂行办法》。此后，同业存单开始逐渐成为商业银行获取的同业负债的重要工具，wind数据显示同业存单的存量规模迅速从2014年初的340亿元上涨到2017年末的8万亿，此后逐渐进入了平缓期，截至2022年4月末，同业存单的规模已经达到了14.5万亿。”</span></td>
 <td>2013</td>
 <td>存量 2014 年初 340 亿→2017 年末 8 万亿→2022 年 4 月约 14.5 万亿</td>
-<td>手册四 §3.4；手册五 §02</td>
 </tr>
-<tr>
-<td>MLF</td>
+<tr class="a-row" tabindex="0">
+<td>MLF<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“中期借贷便利（MLF）2014年3、6、12个月国债、央行票据、政策性金融债、高等级信用债等优质债券符合宏观审慎管理要求的商业银行、政策性银行现在主要投放期限是一年。2018年抵押品拓展至不低于AA级的小微企业、绿色和“三农”金融债券；AA+、AA级公司信用类债券；优质的小微企业贷款和绿色贷款。”</span></td>
 <td>2014</td>
 <td>3/6/12 个月→惯例化每月月中 1 年期；中期政策利率；质押品 2018 年扩围</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>PSL</td>
+<tr class="a-row" tabindex="0">
+<td>PSL<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“抵押补充贷款（PSL)2014年3-5年高等级债券资产和优质信贷资产政策性银行支持国民经济重点领域、薄弱环节和社会事业发展而对金融机构提供的期限较长的大额融资”</span></td>
 <td>2014</td>
 <td>3—5 年，对象为政策性银行（棚改等）</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>TLF</td>
+<tr class="a-row" tabindex="0">
+<td>TLF<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“临时流动性便利（TLF）2017年28天不需要抵押品在现金投放中占比高的几家大型商业银行主要用于应对春节资金需求”</span></td>
 <td>2017</td>
 <td>28 天临时流动性便利（应对春节，无需抵押品）</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>CRA</td>
+<tr class="a-row" tabindex="0">
+<td>CRA<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“临时准备金动用安排（CRA）2017年30天不需要抵押品在现金投放中占比较高的全国性商业银行主要用于应对春节资金需求，临时使用不超过两个百分点的法定存款准备金”</span></td>
 <td>2017/2018（正文与表格表述略有出入）</td>
 <td>临时准备金动用安排（应对春节，可用不超过 2 个百分点法准）</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>TMLF</td>
+<tr class="a-row" tabindex="0">
+<td>TMLF<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“定向中期借贷便利（TMLF）2018年1-3年未明确规定，可以参照MLF实体经济力度大、符合宏观审慎要求的大型商业银行、股份制商业银行和大型城市商业银行定向支持小微企业和民营企业贷款……不过2020 年后已经不多见了。”</span></td>
 <td>2018</td>
 <td>1—3 年定向支持小微民营；2020 年后已不多见</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>CBS</td>
+<tr class="a-row" tabindex="0">
+<td>CBS<span class="pop"><span class="src">出处：手册三 §3.1</span>（手册三 p.33）<br>原文：“央行票据互换（CBS）2019年原则上不超过3年合格银行发行的永续债一级交易商主要为了提升银行永续债的市场流动性，支持银行发行永续债补充资本，增强金融支持实体经济的能力”</span></td>
 <td>2019</td>
 <td>央行票据互换，支持银行永续债、补充资本</td>
-<td>手册三 §3.1</td>
 </tr>
-<tr>
-<td>两项直达工具</td>
+<tr class="a-row" tabindex="0">
+<td>两项直达工具<span class="pop"><span class="src">出处：手册三 §3.1；手册二 §3</span>（手册三 p.30）<br>原文：“第四，两项直达实体经济的货币政策工具，包括普惠小微企业贷款延期还本付息政策和信用贷款支持政策。 这两项计划是在2020 年6 月，央行为了缓解疫情对实体企业的冲击，加大对小微企业的信贷支持力度而新设立的政策工具，此后又多次续作。 ……另外，央行也将“普惠小微企业信用贷款支持计划”并入“支农支小再贷款”管理。”</span></td>
 <td>2020.6</td>
 <td>普惠小微贷款延期支持＋信用贷款支持；<strong>2022 年初接续转换</strong>（余额增量 1% 支持工具；并入支农支小再贷款）</td>
-<td>手册三 §3.1；手册二 §3</td>
 </tr>
-<tr>
-<td>碳减排支持工具</td>
+<tr class="a-row" tabindex="0">
+<td>碳减排支持工具<span class="pop"><span class="src">出处：手册三 §3.1；手册二 §3</span>（手册二 p.26）<br>原文：“再比如在2021 年央行推出了碳减排支持工具。央行通过“先贷后借”的直达机制，对金融机构向碳减排重点领域内相关企业发放的符合条件的碳减排贷款，按贷款本金的60%提供资金支持，利率为1.75%。”</span></td>
 <td>2021.11</td>
 <td>"先贷后借"、按本金 60%、利率 1.75%、1 年可展期 2 次</td>
-<td>手册三 §3.1；手册二 §3</td>
 </tr>
-<tr>
-<td>LPR</td>
+<tr class="a-row" tabindex="0">
+<td>LPR<span class="pop"><span class="src">出处：手册三 §2.1</span>（手册三 p.22）<br>原文：“LPR 利率早在2013 年就已经推出了，但是当时LPR 利率还存在不少问题： ……进一步的改革是在2019 年，当时央行开始优化LPR 报价机制。其中，主要的调整可以归纳为这么几点： 一来央行先确定了贷款市场报价利率（LPR）在贷款利率中的基准地位，明确要求各金融机构在确定贷款利率的时候要以LPR 利率为基准。”</span></td>
 <td>2013 首次推出</td>
 <td><strong>2019 年改革</strong>（锚定 MLF 加点、纳入 MPA），成为贷款定价基准</td>
-<td>手册三 §2.1</td>
 </tr>
-<tr>
-<td>MPA 考核</td>
+<tr class="a-row" tabindex="0">
+<td>MPA 考核<span class="pop"><span class="src">出处：手册二 §2.2</span>（手册二 p.17）<br>原文：“比如在2016年先是将“差别准备金动态调整机制”升级为宏观审慎评估体系（MPA）。……2017 年监管将表外理财纳入MPA 广义信贷口径，并不断完善宏观审慎监管。”</span></td>
 <td>2016（前身差别准备金动态调整 2011）</td>
 <td>2017 年表外理财纳入广义信贷口径</td>
-<td>手册二 §2.2</td>
 </tr>
 </tbody>
 </table>
@@ -491,7 +456,7 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
     pop.style.display = '';
     pop.style.position = '';
   }
-  document.querySelectorAll('.a').forEach(function (el) {
+  document.querySelectorAll('.a, .a-row').forEach(function (el) {
     el.addEventListener('mouseenter', function () { place(el); });
     el.addEventListener('focus', function () { place(el); });
     el.addEventListener('mouseleave', function () { hide(el); });
