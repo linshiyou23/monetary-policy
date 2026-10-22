@@ -16,7 +16,8 @@ COLS = ROOT / "中国货币政策执行报告" / "专栏文章"
 PAGES = ["site/framework.html", "site/evolution.html", "site/stages.html"]
 
 SRC_RE = re.compile(r'<span class="src">央行更新：(\d{4})Q([1-4]) 货政报告·专栏 (\d+)《')
-Q_RE = re.compile(r'<span class="q">“(.*)”</span>\s*$', re.S)
+# q 段落以 ”</span> 收尾；摘录内部的嵌套弯引号后不会紧跟 </span>，故该终止符无歧义
+Q_RE = re.compile(r'<span class="q">“(.*?)”</span>', re.S)
 
 
 def col_text(issue: str, no: str) -> str:
@@ -48,14 +49,9 @@ def main() -> int:
                 if cur_key is None:
                     continue
                 text = col_text(*cur_key)
-                for line in part.splitlines():
-                    line = line.strip()
-                    mq = Q_RE.match(line)
-                    if not mq:
-                        continue
+                for quote in Q_RE.findall(part):
                     total += 1
                     checked_in_page += 1
-                    quote = mq.group(1)
                     if quote in text:
                         ok += 1
                     else:
