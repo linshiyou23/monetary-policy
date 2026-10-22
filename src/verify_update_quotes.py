@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-"""核验 site/ 三个 HTML 中"政策更新"气泡的专栏摘录是否为专栏文章 md 的逐字子串。
+"""核验 site/ 三个 HTML 中批注气泡的摘录是否为对应来源的逐字子串。
 
-气泡格式约定（.a.upd 内的 .pop）：
+蓝色批注（.a.upd 内的 .pop）：来源为央行专栏 md 提取件，逐字精确比对：
   <span class="src">央行更新：2024Q4 货政报告·专栏 1《……》</span>
-  <span class="q">“……摘录……”</span>
+绿色批注（.a.grn 内的 .pop）：来源为寇文红博士文章 PDF 提取件（sources/txt/，仅本地留存），
+PDF 提取文本在数字与标点前后带有空格，故按"删除全部空白后"比对：
+  <span class="src">观点补充：寇文红博士《……》</span>
 一个 pop 可含多个 src 段；每个 q 归属于其前方最近的 src。
 用法：python -X utf8 src/verify_update_quotes.py
 """
@@ -13,11 +15,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 COLS = ROOT / "中国货币政策执行报告" / "专栏文章"
+KOU_TXT = ROOT / "sources" / "txt" / "2024年6月以来我国央行对利率体系和调控框架的改革.txt"
 PAGES = ["site/framework.html", "site/evolution.html", "site/stages.html"]
 
 SRC_RE = re.compile(r'<span class="src">央行更新：(\d{4})Q([1-4]) 货政报告·专栏 (\d+)《')
+KOU_RE = re.compile(r'<span class="src">观点补充：寇文红博士')
 # q 段落以 ”</span> 收尾；摘录内部的嵌套弯引号后不会紧跟 </span>，故该终止符无歧义
 Q_RE = re.compile(r'<span class="q">“(.*?)”</span>', re.S)
+
+
+def kou_text() -> str:
+    return KOU_TXT.read_text(encoding="utf-8")
 
 
 def col_text(issue: str, no: str) -> str:
@@ -36,20 +44,28 @@ def main() -> int:
         pops = re.findall(r'<span class="pop">(.*?)</span></span>', html, re.S)
         checked_in_page = 0
         for pop in pops:
-            if "央行更新" not in pop:
+            if "央行更新" not in pop and "寇文红博士" not in pop:
                 continue
             # 按 src 分段，确定每段 q 的归属
-            parts = re.split(r'(<span class="src">央行更新：\d{4}Q[1-4] 货政报告·专栏 \d+《[^<]*</span>)', pop)
+            parts = re.split(r'(<span class="src">[^<]*</span>)', pop)
             cur_key = None
             for part in parts:
                 m = SRC_RE.search(part)
                 if m:
                     cur_key = (m.group(1) + "Q" + m.group(2), m.group(3))
                     continue
+                if KOU_RE.search(part):
+                    cur_key = "KOU"
+                    continue
                 if cur_key is None:
                     continue
-                text = col_text(*cur_key)
-                for quote in Q_RE.findall(part):
+                if cur_key == "KOU":
+                    text = re.sub(r"\s+", "", kou_text())
+                    quotes = [re.sub(r"\s+", "", q) for q in Q_RE.findall(part)]
+                else:
+                    text = col_text(*cur_key)
+                    quotes = Q_RE.findall(part)
+                for quote in quotes:
                     total += 1
                     checked_in_page += 1
                     if quote in text:
