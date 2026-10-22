@@ -60,6 +60,19 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 .grn strong { color: #07642a; }
 .a.grn > .pop, .grn > .pop { background: #f2fbf5; border-color: #a5d6ad; color: #17401f; }
 .a.grn > .pop .src, .grn > .pop .src { color: #0a7d32; }
+
+/* 流程图组件（利率体系示意，节点可挂悬停批注） */
+.dg { position: relative; width: 808px; max-width: 100%; height: 262px; margin: 1.4em auto 1.2em; font-size: 15px; }
+.dg .cap { position: absolute; top: -8px; width: 185px; text-align: center; font-weight: 600; font-size: 14.5px; color: #333; }
+.dg .grp { position: absolute; width: 185px; border: 2px dashed #cc6666; border-radius: 12px; }
+.dg .nd { position: absolute; width: 165px; height: 54px; background: #fdfdfd; border: 1.5px solid #7fa8d0; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.3; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.dg .nd .sub { font-size: 11px; color: #0b62c4; line-height: 1.25; }
+.dg .cb { position: absolute; width: 106px; height: 150px; border-radius: 50%; background: #eaf3fc; border: 1.5px solid #7fa8d0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
+.dg svg.wire { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.dg .chip { position: absolute; font-size: 12px; color: #555; background: #fff; border-radius: 4px; padding: 1px 7px; white-space: nowrap; line-height: 1.5; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff; }
+.dg .chip b { color: #333; font-weight: 600; }
+.dgcap { font-size: 13px; color: var(--muted); margin: .3em 0 1.4em; }
+
 @media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
 </head>
@@ -129,6 +142,26 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <span class="q">“中国人民银行应市场需要增加隔夜逆回购操作品种，并在今年6月末首次开展操作。”</span><br>
 <span class="q">“结合一级交易商需求，逐步增加隔夜逆回购的操作频率，进一步畅通政策利率向市场利率的传导。”</span>
 </span></span></h3>
+<div class="dgwrap">
+<div class="dg" id="dgF">
+  <div class="cap" style="left:213px">央行政策利率</div>
+  <div class="cap" style="left:418px">市场基准利率</div>
+  <div class="cap" style="left:623px">市场利率</div>
+  <div class="grp" style="left:213px; top:14px; height:168px"></div>
+  <div class="grp" style="left:418px; top:14px; height:246px"></div>
+  <div class="grp" style="left:623px; top:14px; height:246px"></div>
+  <div class="cb" id="F-cb" style="left:0; top:26px">央&nbsp;行</div>
+  <div class="nd a upd" id="F-n1" tabindex="0" style="left:225px; top:34px">7天逆回购利率<span class="sub">主要政策利率 · 2024.7 起</span><span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“一是明确7天期逆回购操作利率是主要政策利率，传递短端利率调控的目标水平。2024年7月，公开市场7天期逆回购操作从竞争性利率招标调整为固定利率、充分满足一级交易商需求，消除了操作利率变化的不确定性，利率水平作为短端利率定价“锚”的作用进一步增强。”</span></span></div>
+  <div class="nd a upd" id="F-n2" tabindex="0" style="left:430px; top:34px">DR001<span class="sub">目标利率 · 2025 起（原 DR007）</span><span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“2025年起，短端利率调控目标从过去的DR007逐步转向DR001，2026年以来进一步向市场明确传递了目标利率转隔夜的信号。”</span></span></div>
+  <div class="nd" id="F-n3" style="left:635px; top:34px">货币市场利率</div>
+  <div class="nd a upd" id="F-m2" tabindex="0" style="left:430px; top:114px">LPR<span class="sub">报价参考短端政策利率</span><span class="pop"><span class="src">央行更新：2024Q2 货政报告·专栏 2《进一步健全市场化的利率调控机制》</span><br><span class="q">“以2024年7月为例，当月15日MLF利率未作调整，22日7天期逆回购操作利率下降10个基点，同日报出的LPR迅速作出反应并跟随调整，也表明LPR报价转向更多参考央行短期政策利率，由短及长的利率传导关系在逐步理顺。”</span></span></div>
+  <div class="nd" id="F-m3" style="left:635px; top:114px">信贷市场利率</div>
+  <div class="nd a upd" id="F-b2" tabindex="0" style="left:430px; top:194px">国债收益率<span class="pop"><span class="src">央行更新：2024Q4 货政报告·专栏 1《进一步完善央行公开市场操作体系》</span><br><span class="q">“2024年8月起，中国人民银行在公开市场操作中逐步增加国债买卖，并定位于基础货币投放和流动性管理工具，有买有卖、双向开展。2024年累计净买入国债1万亿元”</span></span></div>
+  <div class="nd" id="F-b3" style="left:635px; top:194px">债券市场利率</div>
+  <svg class="wire" viewBox="0 0 808 262"></svg>
+</div>
+</div>
+<p class="dgcap">注：示意图参照寇文红博士《2024年6月以来我国央行对利率体系和调控框架的改革》图 3 与货政报告专栏整理；蓝色小字为相对研报时点（2022 年中）的变化，悬停节点可查批注。</p>
 <ul>
 <li><span class="a" tabindex="0"><strong>OMO（7 天逆回购）利率＝短期政策利率</strong>，每日开展操作；<strong>MLF（1 年期）利率＝中期政策利率</strong>，每月月中（一般 15 日，遇节假日顺延）开展操作。<span class="pop"><span class="src">出处：手册三 §2.2；手册四 §1</span>（手册四 p.6）<br>原文：“同时，央行也逐渐形成了每日在公开市场开展逆回购操作来培育短期政策利率（7 天OMO 利率），每个月月中开展MLF 操作来培育中期政策利率（1 年期MLF 利率）的操作模式。”</span></span></li>
 <li><span class="a" tabindex="0">央行引导 <strong>DR007 围绕 OMO 利率为中枢波动</strong>。以 2020 年 6 月—2022 年 2 月为样本，DR007 向上偏离均值约 12.7BP、向下偏离均值约 13.9BP，80 分位约 18.7BP/22.5BP——即市场利率一般在政策利率上下 20BP 左右波动，月底、季末、缴税时点易向上偏离，月初、季初及央行释放宽松信号后易向下偏离。<span class="pop"><span class="src">出处：手册三 §2.2</span>（手册三 p.25）<br>原文：“考虑到这一点我们选取2020 年6 月到2022 年2 月末作为观察时点来进行分析。 在观察期间DR007 向上偏离OMO 利率的均值为12.7 个BP，向下偏离OMO 利率的均值为13.9 个BP，向上、向下偏离的80 分位数分别为18.7个BP 和22.5 个BP。 即统计数据表明一般市场利率会在政策利率上下20 个BP 左右的区间里波动。”</span></span></li>
@@ -486,6 +519,96 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <p><span class="a" tabindex="0"><strong>判断政策转向的核心</strong>：价格指标是核心——看政策利率是否调整；降准的信号意义已大幅降低，更多出于弥补流动性缺口、降低银行资金成本。<span class="pop"><span class="src">出处：手册三 §2.1/§3.2</span>（手册三 p.20）<br>原文：“在价格型的调控框架下，观察央行政策是否转向的核心自然就是OMO 利率和MLF 利率是否出现调整。……但是在价格调控模式下，降准信号意义就大幅降低了，单独的降准很难体现央行政策的转向。 这时候降准可能更多的是从这么几方面考虑，一是释放中长期资金，弥补流动性缺口，保持流动性合理充裕；二是降低银行的资金成本，引导银行去降低信贷利率，从而推动实体企业融资成本下滑。”</span></span></p>
 </main>
 <footer>资料来源：红塔证券《流动性分析手册》系列一至六 · <span class="upd">蓝色部分依据央行《中国货币政策执行报告》专栏文章（2022Q3—2026Q2）补充</span></footer>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  function box(dg, id) {
+    var r = dg.querySelector('#' + id).getBoundingClientRect();
+    var R = dg.getBoundingClientRect();
+    return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
+             r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
+  }
+  function ellipseEdge(e, ty) {
+    var a = 53, b = 75, dy = ty - e.cy;
+    var f = Math.max(-0.96, Math.min(0.96, dy / b));
+    return { x: e.cx + a * Math.sqrt(1 - f * f), y: e.cy + b * f };
+  }
+  function poly(svg, pts) {
+    var el = document.createElementNS(NS, 'polygon');
+    el.setAttribute('points', pts.map(function (p) { return p[0] + ',' + p[1]; }).join(' '));
+    el.setAttribute('fill', '#c3daf2');
+    el.setAttribute('stroke', '#8fb8de');
+    el.setAttribute('stroke-width', 1.5);
+    el.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(el);
+  }
+  function fatLine(svg, p1, p2, w) {
+    w = (w || 15) / 2;
+    var dx = p2.x - p1.x, dy = p2.y - p1.y, L = Math.hypot(dx, dy);
+    var ux = dx / L, uy = dy / L, px = -uy, py = ux, hl = 18, hw = 15;
+    var bx = p2.x - ux * hl, by = p2.y - uy * hl;
+    poly(svg, [[p1.x + px * w, p1.y + py * w], [bx + px * w, by + py * w],
+               [bx + px * hw, by + py * hw], [p2.x, p2.y],
+               [bx - px * hw, by - py * hw], [bx - px * w, by - py * w],
+               [p1.x - px * w, p1.y - py * w]]);
+  }
+  function fatElbowVR(svg, p1, p2, w) {
+    w = (w || 15) / 2; var hl = 18, hw = 15;
+    var bx = p2.x - hl;
+    poly(svg, [[p1.x - w, p1.y], [p1.x - w, p2.y + w], [bx, p2.y + w],
+               [bx, p2.y + hw], [p2.x, p2.y], [bx, p2.y - hw],
+               [bx, p2.y - w], [p1.x + w, p2.y - w], [p1.x + w, p1.y]]);
+  }
+  function dashElbowVR(svg, p1, p2) {
+    var path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', 'M' + p1.x + ',' + p1.y + ' L' + p1.x + ',' + (p2.y - 2) + ' L' + (p2.x - 12) + ',' + (p2.y - 2));
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#cc6666');
+    path.setAttribute('stroke-width', 2.5);
+    path.setAttribute('stroke-dasharray', '7 5');
+    svg.appendChild(path);
+    var head = document.createElementNS(NS, 'polygon');
+    head.setAttribute('points', (p2.x - 13) + ',' + (p2.y - 7) + ' ' + p2.x + ',' + p2.y + ' ' + (p2.x - 13) + ',' + (p2.y + 7));
+    head.setAttribute('fill', '#fff');
+    head.setAttribute('stroke', '#cc6666');
+    head.setAttribute('stroke-width', 2);
+    head.setAttribute('stroke-dasharray', '5 4');
+    svg.appendChild(head);
+  }
+  function chip(dg, x, y, html) {
+    var s = document.createElement('span');
+    s.className = 'chip'; s.style.left = x + 'px'; s.style.top = y + 'px'; s.innerHTML = html;
+    dg.appendChild(s);
+  }
+  var dg = document.getElementById('dgF');
+  var svg = dg.querySelector('svg.wire');
+  function box(id) {
+    var r = dg.querySelector('#' + id).getBoundingClientRect();
+    var R = dg.getBoundingClientRect();
+    return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
+             r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
+  }
+  function ellipseEdge(e, ty) {
+    var a = 53, b = 75, dy = ty - e.cy;
+    var f = Math.max(-0.96, Math.min(0.96, dy / b));
+    return { x: e.cx + a * Math.sqrt(1 - f * f), y: e.cy + b * f };
+  }
+  var cb = box('F-cb');
+  var n1 = box('F-n1'), n2 = box('F-n2'), n3 = box('F-n3');
+  var m2 = box('F-m2'), m3 = box('F-m3');
+  var b2 = box('F-b2'), b3 = box('F-b3');
+  fatLine(svg, ellipseEdge(cb, n1.cy), { x: n1.l - 2, y: n1.cy }, 17);
+  fatElbowVR(svg, { x: cb.cx, y: cb.b + 1 }, { x: b2.l - 2, y: b2.cy }, 15);
+  fatLine(svg, { x: n1.r - 1, y: n1.cy }, { x: n2.l - 2, y: n2.cy });
+  fatLine(svg, { x: n2.r - 1, y: n2.cy }, { x: n3.l - 2, y: n3.cy });
+  fatElbowVR(svg, { x: n1.cx, y: n1.b + 1 }, { x: m2.l - 2, y: m2.cy }, 12);
+  fatLine(svg, { x: m2.r - 1, y: m2.cy }, { x: m3.l - 2, y: m3.cy });
+  fatLine(svg, { x: b2.r - 1, y: b2.cy }, { x: b3.l - 2, y: b3.cy });
+  chip(dg, 150, 44, '<b>逆回购</b>（研究切换为隔夜）');
+  chip(dg, cb.cx + 130, b2.cy + 27, '<b>国债买卖</b> · 2024.8 起');
+})();
+</script>
 
 <script>
 (function () {
