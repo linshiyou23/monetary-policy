@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>草稿 2-3：利率体系与调控框架·图 2（2024.7—2026.10）</title>
+<style>
+:root { --ink:#1f2328; --muted:#57606a; --line:#d8dee4; --accent:#0b5394; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0 16px 64px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  color: var(--ink); background: #fbfbfa; line-height: 1.75;
+}
+main { max-width: 920px; margin: 0 auto; background:#fff; padding: 48px 56px 56px;
+  border: 1px solid var(--line); border-radius: 8px; margin-top: 32px; }
+h1, h2, h3, h4 { line-height: 1.4; color: #111; }
+h1 { font-size: 1.7em; border-bottom: 2px solid var(--accent); padding-bottom: .4em; margin-top: .5em; }
+h2 { font-size: 1.3em; border-bottom: 1px solid var(--line); padding-bottom: .3em; margin-top: 2em; }
+h3 { font-size: 1.1em; margin-top: 1.6em; }
+p, li { font-size: 15.5px; }
+a { color: var(--accent); }
+strong { color: #000; }
+blockquote {
+  margin: 1em 0; padding: 10px 18px; color: var(--muted);
+  background: #f6f8fa; border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
+}
+blockquote p { font-size: 14.5px; margin: .3em 0; }
+table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 14.5px; display: table; }
+th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: #f2f5f8; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid var(--line); margin: 2.2em 0; }
+code { background: #f2f5f8; border-radius: 4px; padding: 1px 5px; font-size: .92em;
+  font-family: Consolas, "Courier New", monospace; }
+footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
+@media print { body { background:#fff; padding:0; } main { border:none; padding:0; margin:0; max-width:none; } footer { display:none; } }
+@media (max-width: 640px) { main { padding: 24px 16px; } table { display: block; overflow-x: auto; } }
+
+/* 悬停批注（出处＋报告原文摘录）：句子与表格行共用气泡样式 */
+.a { position: relative; cursor: help; }
+.a-row { cursor: help; }
+.a-row td:first-child { position: relative; }
+.a > .pop, .a-row .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+  width: min(560px, 82vw); padding: 10px 14px; background: #fffdf3; border: 1px solid #d9c78f;
+  border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); font-size: 13.5px; line-height: 1.8;
+  color: #4a3f24; text-align: left; cursor: auto; }
+.a:hover > .pop, .a:focus > .pop, .a-row:hover .pop, .a-row:focus .pop { display: block; }
+.pop .src { color: var(--accent); font-weight: 600; }
+.cite-badge { font-size: 13px; color: var(--muted); }
+
+/* 政策更新（2022.7 后）：蓝色正文＋浅蓝双段气泡（原研报框架＋央行专栏摘录） */
+.upd { color: #0b62c4; }
+.upd strong { color: #054a9e; }
+.a.upd > .pop, .upd > .pop { background: #f3f9ff; border-color: #a3c6e8; color: #16324f; }
+.a.upd > .pop .src, .upd > .pop .src { color: #0b62c4; }
+
+/* 学者观点补充（寇文红博士）：绿色正文＋浅绿气泡 */
+.grn { color: #0a7d32; }
+.grn strong { color: #07642a; }
+.a.grn > .pop, .grn > .pop { background: #f2fbf5; border-color: #a5d6ad; color: #17401f; }
+.a.grn > .pop .src, .grn > .pop .src { color: #0a7d32; }
+
+/* 流程图组件（利率体系示意，节点可挂悬停批注） */
+.dg { position: relative; width: 808px; max-width: 100%; height: 262px; margin: 1.4em auto 1.2em; font-size: 15px; }
+.dg .cap { position: absolute; top: -8px; width: 185px; text-align: center; font-weight: 600; font-size: 14.5px; color: #333; }
+.dg .grp { position: absolute; width: 185px; border: 2px dashed #cc6666; border-radius: 12px; }
+.dg .nd { position: absolute; width: 165px; height: 54px; background: #fdfdfd; border: 1.5px solid #7fa8d0; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.3; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.dg .nd .sub { font-size: 11px; color: #0b62c4; line-height: 1.25; }
+.dg .nd .subg { font-size: 11px; color: #0a7d32; line-height: 1.25; }
+.dg .cb { position: absolute; width: 106px; height: 150px; border-radius: 50%; background: #eaf3fc; border: 1.5px solid #7fa8d0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
+.dg svg.wire { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.dg .chip { position: absolute; font-size: 12px; color: #555; background: #fff; border-radius: 4px; padding: 1px 7px; white-space: nowrap; line-height: 1.5; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff; }
+.dg .chip b { color: #333; font-weight: 600; }
+.dgcap { font-size: 13px; color: var(--muted); margin: .3em 0 1.4em; }
+
+/* 六条制度主线总时间轴 */
+.master-timeline { margin: 1.4em 0 2em; }
+.master-timeline__viewport { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: #fbfcfe; }
+.master-timeline__grid { min-width: 780px; padding: 18px 18px 14px; }
+.master-timeline__header, .master-timeline__row { display: grid; grid-template-columns: 136px repeat(8, minmax(76px, 1fr)); }
+.master-timeline__header { align-items: end; border-bottom: 1px solid #c7d3df; padding-bottom: 8px; }
+.master-timeline__header .axis-label { color: var(--muted); font-size: 12px; font-weight: 600; }
+.master-timeline__year { position: relative; color: #5f6f80; font-size: 11px; text-align: center; }
+.master-timeline__year::after { content: ""; position: absolute; left: 50%; top: 23px; width: 1px; height: 16px; background: #c7d3df; }
+.master-timeline__row { min-height: 54px; align-items: center; border-bottom: 1px solid #e4e9ee; }
+.master-timeline__row:last-child { border-bottom: 0; }
+.master-timeline__label { padding-right: 12px; color: #354b62; font-size: 12px; font-weight: 600; line-height: 1.35; }
+.master-timeline__track { grid-column: 2 / 10; display: grid; grid-template-columns: repeat(8, minmax(76px, 1fr)); align-items: center; min-height: 34px; position: relative; background: repeating-linear-gradient(to right, transparent 0, transparent calc(12.5% - 1px), #edf1f5 calc(12.5% - 1px), #edf1f5 12.5%); }
+.master-timeline__segment { z-index: 1; min-height: 32px; margin: 0 4px; padding: 6px 9px; border-radius: 6px; background: #eaf3fc; border: 1px solid #a9c7e1; color: #234d73; font-size: 11px; line-height: 1.35; }
+.master-timeline__segment--warm { background: #fff8e8; border-color: #ddc98f; color: #765719; }
+.master-timeline__segment--green { background: #f1f8f2; border-color: #acd0b3; color: #2f6240; }
+.master-timeline__segment--blue { background: #ddecfb; border-color: #7fa8d0; color: #0b5394; }
+.master-timeline__segment strong { font-weight: 600; }
+.master-timeline__segment::before { content: attr(data-period); display: block; font-size: 11px; opacity: .75; margin-bottom: 3px; }
+.master-timeline__legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 12px 0 0 136px; color: var(--muted); font-size: 12px; }
+.master-timeline__legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; background: #eaf3fc; border: 1px solid #a9c7e1; }
+.master-timeline__legend i.warm { background: #fff8e8; border-color: #ddc98f; }
+.master-timeline__legend i.green { background: #f1f8f2; border-color: #acd0b3; }
+.master-timeline figcaption { margin-top: .65em; color: var(--muted); font-size: 13px; }
+@media (max-width: 640px) {
+  .master-timeline__grid { min-width: 0; padding: 12px 14px; }
+  .master-timeline__header { display: none; }
+  .master-timeline__row { display: block; padding: 10px 0; }
+  .master-timeline__label { display: block; margin-bottom: 7px; font-size: 13px; }
+  .master-timeline__track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; background: none; }
+  .master-timeline__segment { grid-column: auto !important; display: flex; flex-direction: column; justify-content: center; margin: 0; min-height: 62px; padding: 7px 9px; }
+  .master-timeline__legend { margin-left: 0; }
+}
+
+@media print { .a > .pop, .a-row .pop { display: none !important; } }
+</style>
+</head>
+<body>
+<main>
+<div class="dgwrap">
+<div class="dg" id="dgE2">
+  <div class="cap" style="left:213px">央行政策利率</div>
+  <div class="cap" style="left:418px">市场基准利率</div>
+  <div class="cap" style="left:623px">市场利率</div>
+  <div class="grp" style="left:213px; top:14px; height:168px"></div>
+  <div class="grp" style="left:418px; top:14px; height:246px"></div>
+  <div class="grp" style="left:623px; top:14px; height:246px"></div>
+  <div class="cb" id="E2-cb" style="left:0; top:26px">央&nbsp;行</div>
+  <div class="nd a upd" id="E2-r1" tabindex="0" style="left:225px; top:34px">7天逆回购利率<span class="sub">主要政策利率</span><span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“一是明确7天期逆回购操作利率是主要政策利率，传递短端利率调控的目标水平。2024年7月，公开市场7天期逆回购操作从竞争性利率招标调整为固定利率、充分满足一级交易商需求，消除了操作利率变化的不确定性，利率水平作为短端利率定价“锚”的作用进一步增强。”</span></span></div>
+  <div class="nd" id="E2-n2" style="left:430px; top:34px">DR007</div>
+  <div class="nd" id="E2-n3" style="left:635px; top:34px">货币市场利率</div>
+  <div class="nd a upd" id="E2-m2" tabindex="0" style="left:430px; top:114px">LPR<span class="sub">报价参考短端政策利率</span><span class="pop"><span class="src">央行更新：2024Q2 货政报告·专栏 2《进一步健全市场化的利率调控机制》</span><br><span class="q">“以2024年7月为例，当月15日MLF利率未作调整，22日7天期逆回购操作利率下降10个基点，同日报出的LPR迅速作出反应并跟随调整，也表明LPR报价转向更多参考央行短期政策利率，由短及长的利率传导关系在逐步理顺。”</span></span></div>
+  <div class="nd" id="E2-m3" style="left:635px; top:114px">信贷市场利率</div>
+  <div class="nd a upd" id="E2-b1" tabindex="0" style="left:225px; top:194px">国债收益率<span class="pop"><span class="src">央行更新：2024Q4 货政报告·专栏 1《进一步完善央行公开市场操作体系》</span><br><span class="q">“2024年8月起，中国人民银行在公开市场操作中逐步增加国债买卖，并定位于基础货币投放和流动性管理工具，有买有卖、双向开展。2024年累计净买入国债1万亿元”</span></span></div>
+  <div class="nd" id="E2-b2" style="left:430px; top:194px">收益率曲线</div>
+  <div class="nd" id="E2-b3" style="left:635px; top:194px">债券市场利率</div>
+  
+  <svg class="wire" viewBox="0 0 808 262"></svg>
+</div>
+</div>
+<p class="dgcap"><span class="a grn" tabindex="0">图 2：2024 年 7 月至 2026 年 10 月的利率体系和调控框架——2024 年 7 月起央行重塑框架、理顺利率传导机制（改革后详见下文各线索蓝色更新）。<span class="pop">
+<span class="src">观点补充：寇文红博士《2024年6月以来我国央行对利率体系和调控框架的改革》</span><br>
+<span class="q">“通过改革，强化了对利率和流动性的控制，理顺利率传导机制”</span><br>
+<span class="q">“经过2024年下半年以来的改革”</span><br>
+<span class="q">“（1）“7天期逆回购操作利率”成为主要的政策利率”</span><br>
+<span class="q">“（5）央行强化了对流动的控制，可以通过OMO更加精准灵活地调节短期市场流动性，使流动性调控更加有效；通过MLF调节中期流动性；通过国债交易调控长期流动性。”</span>
+</span></span></p>
+</main>
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  function box(dg, id) {
+    var r = dg.querySelector('#' + id).getBoundingClientRect();
+    var R = dg.getBoundingClientRect();
+    return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
+             r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
+  }
+  function ellipseEdge(e, ty) {
+    var a = 53, b = 75, dy = ty - e.cy;
+    var f = Math.max(-0.96, Math.min(0.96, dy / b));
+    return { x: e.cx + a * Math.sqrt(1 - f * f), y: e.cy + b * f };
+  }
+  function poly(svg, pts) {
+    var el = document.createElementNS(NS, 'polygon');
+    el.setAttribute('points', pts.map(function (p) { return p[0] + ',' + p[1]; }).join(' '));
+    el.setAttribute('fill', '#c3daf2');
+    el.setAttribute('stroke', '#8fb8de');
+    el.setAttribute('stroke-width', 1.5);
+    el.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(el);
+  }
+  function fatLine(svg, p1, p2, w) {
+    w = (w || 15) / 2;
+    var dx = p2.x - p1.x, dy = p2.y - p1.y, L = Math.hypot(dx, dy);
+    var ux = dx / L, uy = dy / L, px = -uy, py = ux, hl = 18, hw = 15;
+    var bx = p2.x - ux * hl, by = p2.y - uy * hl;
+    poly(svg, [[p1.x + px * w, p1.y + py * w], [bx + px * w, by + py * w],
+               [bx + px * hw, by + py * hw], [p2.x, p2.y],
+               [bx - px * hw, by - py * hw], [bx - px * w, by - py * w],
+               [p1.x - px * w, p1.y - py * w]]);
+  }
+  function fatElbowVR(svg, p1, p2, w) {
+    w = (w || 15) / 2; var hl = 18, hw = 15;
+    var bx = p2.x - hl;
+    poly(svg, [[p1.x - w, p1.y], [p1.x - w, p2.y + w], [bx, p2.y + w],
+               [bx, p2.y + hw], [p2.x, p2.y], [bx, p2.y - hw],
+               [bx, p2.y - w], [p1.x + w, p2.y - w], [p1.x + w, p1.y]]);
+  }
+  function dashElbowVR(svg, p1, p2) {
+    var path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', 'M' + p1.x + ',' + p1.y + ' L' + p1.x + ',' + (p2.y - 2) + ' L' + (p2.x - 12) + ',' + (p2.y - 2));
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#cc6666');
+    path.setAttribute('stroke-width', 2.5);
+    path.setAttribute('stroke-dasharray', '7 5');
+    svg.appendChild(path);
+    var head = document.createElementNS(NS, 'polygon');
+    head.setAttribute('points', (p2.x - 13) + ',' + (p2.y - 7) + ' ' + p2.x + ',' + p2.y + ' ' + (p2.x - 13) + ',' + (p2.y + 7));
+    head.setAttribute('fill', '#fff');
+    head.setAttribute('stroke', '#cc6666');
+    head.setAttribute('stroke-width', 2);
+    head.setAttribute('stroke-dasharray', '5 4');
+    svg.appendChild(head);
+  }
+  function chip(dg, x, y, html) {
+    var s = document.createElement('span');
+    s.className = 'chip'; s.style.left = x + 'px'; s.style.top = y + 'px'; s.innerHTML = html;
+    dg.appendChild(s);
+  }
+  function box(id) {
+    var r = dg.querySelector('#' + id).getBoundingClientRect();
+    var R = dg.getBoundingClientRect();
+    return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
+             r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
+  }
+  function ellipseEdge(e, ty) {
+    var a = 53, b = 75, dy = ty - e.cy;
+    var f = Math.max(-0.96, Math.min(0.96, dy / b));
+    return { x: e.cx + a * Math.sqrt(1 - f * f), y: e.cy + b * f };
+  }
+  function drawOne(pid, conns) {
+    var dg = document.getElementById(pid);
+    var svg = dg.querySelector('svg.wire');
+    conns(svg, function (id) {
+      var r = dg.querySelector('#' + id).getBoundingClientRect();
+      var R = dg.getBoundingClientRect();
+      return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
+               r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
+    }, function (x, y, html) { chip(dg, x, y, html); });
+  }
+  // 图 2（2024.7—2026.10）
+  drawOne('dgE2', function (svg, box, chip) {
+    var cb = box('E2-cb');
+    var r1 = box('E2-r1'), n2 = box('E2-n2'), n3 = box('E2-n3');
+    var m2 = box('E2-m2'), m3 = box('E2-m3');
+    var b1 = box('E2-b1'), b2 = box('E2-b2'), b3 = box('E2-b3');
+  fatLine(svg, ellipseEdge(cb, r1.cy), { x: r1.l - 2, y: r1.cy }, 17);
+  fatLine(svg, { x: r1.r - 1, y: r1.cy }, { x: n2.l - 2, y: n2.cy });
+  fatLine(svg, { x: n2.r - 1, y: n2.cy }, { x: n3.l - 2, y: n3.cy });
+  fatElbowVR(svg, { x: r1.cx, y: r1.b + 1 }, { x: m2.l - 2, y: m2.cy }, 12);
+  fatLine(svg, { x: m2.r - 1, y: m2.cy }, { x: m3.l - 2, y: m3.cy });
+  fatElbowVR(svg, { x: cb.cx, y: cb.b + 1 }, { x: b1.l - 2, y: b1.cy }, 15);
+  fatLine(svg, { x: b1.r - 1, y: b1.cy }, { x: b2.l - 2, y: b2.cy });
+  fatLine(svg, { x: b2.r - 1, y: b2.cy }, { x: b3.l - 2, y: b3.cy });
+  chip(150, 44, '<b>每日开展</b>');
+  chip(150, b1.cy - 17, '<b>国债交易</b>');
+  });
+})();
+</script>
+<script>
+(function () {
+  function place(el) {
+    var pop = el.querySelector('.pop');
+    if (!pop) return;
+    pop.style.display = 'block';
+    var pw = Math.min(560, innerWidth * 0.82);
+    pop.style.position = 'fixed';
+    pop.style.width = pw + 'px';
+    var r = el.getBoundingClientRect(), ph = pop.offsetHeight;
+    var top = r.bottom + 8;
+    if (top + ph > innerHeight - 8) top = r.top - ph - 8;
+    if (top < 8) top = 8;
+    var left = r.left;
+    if (left + pw > innerWidth - 8) left = innerWidth - 8 - pw;
+    if (left < 8) left = 8;
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+  }
+  function hide(el) {
+    var pop = el.querySelector('.pop');
+    if (!pop) return;
+    pop.style.display = '';
+    pop.style.position = '';
+  }
+  document.querySelectorAll('.a, .a-row').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { place(el); });
+    el.addEventListener('focus', function () { place(el); });
+    el.addEventListener('mouseleave', function () { hide(el); });
+    el.addEventListener('blur', function () { hide(el); });
+  });
+})();
+</script>
+</body>
+</html>

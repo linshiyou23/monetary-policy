@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>草稿 2-1：六条制度主线并行演变时间轴</title>
+<style>
+:root { --ink:#1f2328; --muted:#57606a; --line:#d8dee4; --accent:#0b5394; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0 16px 64px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  color: var(--ink); background: #fbfbfa; line-height: 1.75;
+}
+main { max-width: 920px; margin: 0 auto; background:#fff; padding: 48px 56px 56px;
+  border: 1px solid var(--line); border-radius: 8px; margin-top: 32px; }
+h1, h2, h3, h4 { line-height: 1.4; color: #111; }
+h1 { font-size: 1.7em; border-bottom: 2px solid var(--accent); padding-bottom: .4em; margin-top: .5em; }
+h2 { font-size: 1.3em; border-bottom: 1px solid var(--line); padding-bottom: .3em; margin-top: 2em; }
+h3 { font-size: 1.1em; margin-top: 1.6em; }
+p, li { font-size: 15.5px; }
+a { color: var(--accent); }
+strong { color: #000; }
+blockquote {
+  margin: 1em 0; padding: 10px 18px; color: var(--muted);
+  background: #f6f8fa; border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
+}
+blockquote p { font-size: 14.5px; margin: .3em 0; }
+table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 14.5px; display: table; }
+th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: #f2f5f8; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid var(--line); margin: 2.2em 0; }
+code { background: #f2f5f8; border-radius: 4px; padding: 1px 5px; font-size: .92em;
+  font-family: Consolas, "Courier New", monospace; }
+footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
+@media print { body { background:#fff; padding:0; } main { border:none; padding:0; margin:0; max-width:none; } footer { display:none; } }
+@media (max-width: 640px) { main { padding: 24px 16px; } table { display: block; overflow-x: auto; } }
+
+/* 悬停批注（出处＋报告原文摘录）：句子与表格行共用气泡样式 */
+.a { position: relative; cursor: help; }
+.a-row { cursor: help; }
+.a-row td:first-child { position: relative; }
+.a > .pop, .a-row .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+  width: min(560px, 82vw); padding: 10px 14px; background: #fffdf3; border: 1px solid #d9c78f;
+  border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); font-size: 13.5px; line-height: 1.8;
+  color: #4a3f24; text-align: left; cursor: auto; }
+.a:hover > .pop, .a:focus > .pop, .a-row:hover .pop, .a-row:focus .pop { display: block; }
+.pop .src { color: var(--accent); font-weight: 600; }
+.cite-badge { font-size: 13px; color: var(--muted); }
+
+/* 政策更新（2022.7 后）：蓝色正文＋浅蓝双段气泡（原研报框架＋央行专栏摘录） */
+.upd { color: #0b62c4; }
+.upd strong { color: #054a9e; }
+.a.upd > .pop, .upd > .pop { background: #f3f9ff; border-color: #a3c6e8; color: #16324f; }
+.a.upd > .pop .src, .upd > .pop .src { color: #0b62c4; }
+
+/* 学者观点补充（寇文红博士）：绿色正文＋浅绿气泡 */
+.grn { color: #0a7d32; }
+.grn strong { color: #07642a; }
+.a.grn > .pop, .grn > .pop { background: #f2fbf5; border-color: #a5d6ad; color: #17401f; }
+.a.grn > .pop .src, .grn > .pop .src { color: #0a7d32; }
+
+/* 流程图组件（利率体系示意，节点可挂悬停批注） */
+.dg { position: relative; width: 808px; max-width: 100%; height: 262px; margin: 1.4em auto 1.2em; font-size: 15px; }
+.dg .cap { position: absolute; top: -8px; width: 185px; text-align: center; font-weight: 600; font-size: 14.5px; color: #333; }
+.dg .grp { position: absolute; width: 185px; border: 2px dashed #cc6666; border-radius: 12px; }
+.dg .nd { position: absolute; width: 165px; height: 54px; background: #fdfdfd; border: 1.5px solid #7fa8d0; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.3; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+.dg .nd .sub { font-size: 11px; color: #0b62c4; line-height: 1.25; }
+.dg .nd .subg { font-size: 11px; color: #0a7d32; line-height: 1.25; }
+.dg .cb { position: absolute; width: 106px; height: 150px; border-radius: 50%; background: #eaf3fc; border: 1.5px solid #7fa8d0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
+.dg svg.wire { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.dg .chip { position: absolute; font-size: 12px; color: #555; background: #fff; border-radius: 4px; padding: 1px 7px; white-space: nowrap; line-height: 1.5; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff; }
+.dg .chip b { color: #333; font-weight: 600; }
+.dgcap { font-size: 13px; color: var(--muted); margin: .3em 0 1.4em; }
+
+/* 六条制度主线总时间轴 */
+.master-timeline { margin: 1.4em 0 2em; }
+.master-timeline__viewport { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: #fbfcfe; }
+.master-timeline__grid { min-width: 780px; padding: 18px 18px 14px; }
+.master-timeline__header, .master-timeline__row { display: grid; grid-template-columns: 136px repeat(8, minmax(76px, 1fr)); }
+.master-timeline__header { align-items: end; border-bottom: 1px solid #c7d3df; padding-bottom: 8px; }
+.master-timeline__header .axis-label { color: var(--muted); font-size: 12px; font-weight: 600; }
+.master-timeline__year { position: relative; color: #5f6f80; font-size: 11px; text-align: center; }
+.master-timeline__year::after { content: ""; position: absolute; left: 50%; top: 23px; width: 1px; height: 16px; background: #c7d3df; }
+.master-timeline__row { min-height: 54px; align-items: center; border-bottom: 1px solid #e4e9ee; }
+.master-timeline__row:last-child { border-bottom: 0; }
+.master-timeline__label { padding-right: 12px; color: #354b62; font-size: 12px; font-weight: 600; line-height: 1.35; }
+.master-timeline__track { grid-column: 2 / 10; display: grid; grid-template-columns: repeat(8, minmax(76px, 1fr)); align-items: center; min-height: 34px; position: relative; background: repeating-linear-gradient(to right, transparent 0, transparent calc(12.5% - 1px), #edf1f5 calc(12.5% - 1px), #edf1f5 12.5%); }
+.master-timeline__segment { z-index: 1; min-height: 32px; margin: 0 4px; padding: 6px 9px; border-radius: 6px; background: #eaf3fc; border: 1px solid #a9c7e1; color: #234d73; font-size: 11px; line-height: 1.35; }
+.master-timeline__segment--warm { background: #fff8e8; border-color: #ddc98f; color: #765719; }
+.master-timeline__segment--green { background: #f1f8f2; border-color: #acd0b3; color: #2f6240; }
+.master-timeline__segment--blue { background: #ddecfb; border-color: #7fa8d0; color: #0b5394; }
+.master-timeline__segment strong { font-weight: 600; }
+.master-timeline__segment::before { content: attr(data-period); display: block; font-size: 11px; opacity: .75; margin-bottom: 3px; }
+.master-timeline__legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 12px 0 0 136px; color: var(--muted); font-size: 12px; }
+.master-timeline__legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; background: #eaf3fc; border: 1px solid #a9c7e1; }
+.master-timeline__legend i.warm { background: #fff8e8; border-color: #ddc98f; }
+.master-timeline__legend i.green { background: #f1f8f2; border-color: #acd0b3; }
+.master-timeline figcaption { margin-top: .65em; color: var(--muted); font-size: 13px; }
+@media (max-width: 640px) {
+  .master-timeline__grid { min-width: 0; padding: 12px 14px; }
+  .master-timeline__header { display: none; }
+  .master-timeline__row { display: block; padding: 10px 0; }
+  .master-timeline__label { display: block; margin-bottom: 7px; font-size: 13px; }
+  .master-timeline__track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; background: none; }
+  .master-timeline__segment { grid-column: auto !important; display: flex; flex-direction: column; justify-content: center; margin: 0; min-height: 62px; padding: 7px 9px; }
+  .master-timeline__legend { margin-left: 0; }
+}
+
+@media print { .a > .pop, .a-row .pop { display: none !important; } }
+</style>
+</head>
+<body>
+<main>
+<figure class="master-timeline" aria-labelledby="master-timeline-caption">
+  <div class="master-timeline__viewport">
+    <div class="master-timeline__grid">
+      <div class="master-timeline__header"><div class="axis-label">制度主线</div><div class="master-timeline__year">1984</div><div class="master-timeline__year">1993</div><div class="master-timeline__year">1994/2001</div><div class="master-timeline__year">2008</div><div class="master-timeline__year">2013/14</div><div class="master-timeline__year">2016/19</div><div class="master-timeline__year">2020/24</div><div class="master-timeline__year">2026</div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">基础货币投放</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="1984—1994" style="grid-column:1 / 3"><strong>再贷款</strong><br>主渠道</div><div class="master-timeline__segment master-timeline__segment--warm" data-period="1994/2001—2014" style="grid-column:3 / 5"><strong>外汇占款</strong><br>被动投放</div><div class="master-timeline__segment" data-period="2014 起" style="grid-column:5 / 7"><strong>主动工具</strong><br>OMO、MLF 等</div><div class="master-timeline__segment master-timeline__segment--blue a upd" data-period="2024.8 起" tabindex="0" style="grid-column:7 / 9"><strong>国债买卖</strong><br>立体工具箱<span class="pop"><span class="src">央行更新：2024Q4 货政报告·专栏 1《进一步完善央行公开市场操作体系》</span><br><span class="q">“2024年8月起，中国人民银行在公开市场操作中逐步增加国债买卖，并定位于基础货币投放和流动性管理工具，有买有卖、双向开展。”</span></span></div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">调控方式</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2012 年前" style="grid-column:1 / 4"><strong>数量型为主</strong><br>准备金、央票等</div><div class="master-timeline__segment" data-period="2012—2024" style="grid-column:4 / 7"><strong>向价格型转型</strong><br>利率市场化、LPR</div><div class="master-timeline__segment master-timeline__segment--blue a upd" data-period="2024.7 起" tabindex="0" style="grid-column:7 / 9"><strong>7 天逆回购</strong><br>主要政策利率<span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“一是明确7天期逆回购操作利率是主要政策利率，传递短端利率调控的目标水平。”</span></span></div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">操作框架</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="外汇占款时期" style="grid-column:3 / 5"><strong>结构性流动性充裕</strong><br>外汇占款时代</div><div class="master-timeline__segment" data-period="2014 起" style="grid-column:5 / 9"><strong>结构性流动性短缺</strong><br>央行主动补缺口</div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">中介目标</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2012 年前" style="grid-column:1 / 4"><strong>M2 目标增速</strong><br>数量目标</div><div class="master-timeline__segment" data-period="2012 起" style="grid-column:4 / 7"><strong>M2＋社融</strong><br>与名义经济增速基本匹配</div><div class="master-timeline__segment master-timeline__segment--blue" data-period="2024 起" style="grid-column:7 / 9"><strong>淡化数量目标</strong><br>更多发挥利率作用</div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">调控支柱</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2016 年前" style="grid-column:1 / 6"><strong>单支柱</strong><br>货币政策</div><div class="master-timeline__segment master-timeline__segment--green" data-period="2016 起" style="grid-column:6 / 9"><strong>双支柱</strong><br>货币政策＋宏观审慎（2016 起）</div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">理念与工具</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2020 年前" style="grid-column:1 / 7"><strong>逆周期</strong><br>总量型、间接调控</div><div class="master-timeline__segment master-timeline__segment--green" data-period="2020 起" style="grid-column:7 / 9"><strong>跨周期</strong><br>2020 首提；结构型、直达型</div></div></div>
+    </div>
+  </div>
+  <div class="master-timeline__legend"><span><i class="warm"></i>早期阶段</span><span><i></i>转型阶段</span><span><i class="green"></i>制度成型</span><span><i style="background:#ddecfb;border-color:#7fa8d0"></i>2022 年后政策更新</span></div>
+  <figcaption id="master-timeline-caption">总览图｜六条制度主线的并行演变。横轴按关键节点排列，色块宽度不代表实际持续年数；同一制度在后续阶段可能继续存在。</figcaption>
+</figure>
+</main>
+<script>
+(function () {
+  function place(el) {
+    var pop = el.querySelector('.pop');
+    if (!pop) return;
+    pop.style.display = 'block';
+    var pw = Math.min(560, innerWidth * 0.82);
+    pop.style.position = 'fixed';
+    pop.style.width = pw + 'px';
+    var r = el.getBoundingClientRect(), ph = pop.offsetHeight;
+    var top = r.bottom + 8;
+    if (top + ph > innerHeight - 8) top = r.top - ph - 8;
+    if (top < 8) top = 8;
+    var left = r.left;
+    if (left + pw > innerWidth - 8) left = innerWidth - 8 - pw;
+    if (left < 8) left = 8;
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+  }
+  function hide(el) {
+    var pop = el.querySelector('.pop');
+    if (!pop) return;
+    pop.style.display = '';
+    pop.style.position = '';
+  }
+  document.querySelectorAll('.a, .a-row').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { place(el); });
+    el.addEventListener('focus', function () { place(el); });
+    el.addEventListener('mouseleave', function () { hide(el); });
+    el.addEventListener('blur', function () { hide(el); });
+  });
+})();
+</script>
+</body>
+</html>

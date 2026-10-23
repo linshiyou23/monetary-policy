@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>草稿 1-3：利率走廊宽度与临时操作区间</title>
+<style>
+:root { --ink:#1f2328; --muted:#57606a; --line:#d8dee4; --accent:#0b5394; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0 16px 64px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  color: var(--ink); background: #fbfbfa; line-height: 1.75;
+}
+main { max-width: 920px; margin: 0 auto; background:#fff; padding: 48px 56px 56px;
+  border: 1px solid var(--line); border-radius: 8px; margin-top: 32px; }
+h1, h2, h3, h4 { line-height: 1.4; color: #111; }
+h1 { font-size: 1.7em; border-bottom: 2px solid var(--accent); padding-bottom: .4em; margin-top: .5em; }
+h2 { font-size: 1.3em; border-bottom: 1px solid var(--line); padding-bottom: .3em; margin-top: 2em; }
+h3 { font-size: 1.1em; margin-top: 1.6em; }
+p, li { font-size: 15.5px; }
+a { color: var(--accent); }
+strong { color: #000; }
+blockquote {
+  margin: 1em 0; padding: 10px 18px; color: var(--muted);
+  background: #f6f8fa; border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
+}
+blockquote p { font-size: 14.5px; margin: .3em 0; }
+table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 14.5px; display: table; }
+th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: #f2f5f8; font-weight: 600; white-space: nowrap; }
+tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid var(--line); margin: 2.2em 0; }
+code { background: #f2f5f8; border-radius: 4px; padding: 1px 5px; font-size: .92em;
+  font-family: Consolas, "Courier New", monospace; }
+footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
+@media print { body { background:#fff; padding:0; } main { border:none; padding:0; margin:0; max-width:none; } footer { display:none; } }
+@media (max-width: 640px) { main { padding: 24px 16px; } table { display: block; overflow-x: auto; } }
+
+/* 悬停批注（出处＋报告原文摘录）：句子与表格行共用气泡样式 */
+.a { position: relative; cursor: help; }
+.a-row { cursor: help; }
+.a-row td:first-child { position: relative; }
+.a > .pop, .a-row .pop { display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+  width: min(560px, 82vw); padding: 10px 14px; background: #fffdf3; border: 1px solid #d9c78f;
+  border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); font-size: 13.5px; line-height: 1.8;
+  color: #4a3f24; text-align: left; cursor: auto; }
+.a:hover > .pop, .a:focus > .pop, .a-row:hover .pop, .a-row:focus .pop { display: block; }
+.pop .src { color: var(--accent); font-weight: 600; }
+.cite-badge { font-size: 13px; color: var(--muted); }
+
+/* 政策更新（2022.7 后）：蓝色正文＋浅蓝双段气泡（原研报框架＋央行专栏摘录） */
+.upd { color: #0b62c4; }
+.upd strong { color: #054a9e; }
+.a.upd > .pop, .upd > .pop { background: #f3f9ff; border-color: #a3c6e8; color: #16324f; }
+.a.upd > .pop .src, .upd > .pop .src { color: #0b62c4; }
+
+/* 学者观点补充（寇文红博士）：绿色正文＋浅绿气泡 */
+.grn { color: #0a7d32; }
+.grn strong { color: #07642a; }
+.a.grn > .pop, .grn > .pop { background: #f2fbf5; border-color: #a5d6ad; color: #17401f; }
+.a.grn > .pop .src, .grn > .pop .src { color: #0a7d32; }
+
+/* 结构与传导信息图 */
+.money-map, .rate-map { margin: 1.5em 0 1.8em; color: var(--ink); }
+.money-map figcaption, .rate-map figcaption { margin-top: .65em; color: var(--muted); font-size: 13px; }
+.money-map__flow { position: relative; display: grid; grid-template-columns: 1fr 72px 1.25fr 72px 1fr; align-items: center; gap: 12px; }
+.money-map__node, .money-map__sheet, .money-map__takeaway, .rate-map__node, .rate-map__support { background: #fff; border: 1px solid #b9cfe3; border-radius: 10px; }
+.money-map__node { min-height: 108px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; }
+.money-map__node strong, .rate-map__node strong { color: #0b5394; font-size: 16px; }
+.money-map__node small, .rate-map__node small { display: block; color: var(--muted); line-height: 1.45; margin-top: 4px; }
+.money-map__node--bank { border-color: #7fa8d0; background: #f2f7fc; }
+.money-map__node--entity { border-color: #c7b07b; background: #fdf9ef; }
+.money-map__arrow, .rate-map__arrow { position: relative; height: 3px; background: #8fb8de; border-radius: 3px; }
+.money-map__arrow::after, .rate-map__arrow::after { content: ""; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); border-left: 10px solid #8fb8de; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+.money-map__arrow span { position: absolute; left: 50%; top: -30px; transform: translateX(-50%); white-space: nowrap; color: #315b82; font-size: 12px; }
+.money-map__arrow--credit { background: #c7b07b; }
+.money-map__arrow--credit::after { border-left-color: #c7b07b; }
+.money-map__loop { margin-top: 18px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.money-map__loop-title { margin: 0 0 12px; text-align: center; font-size: 13px; font-weight: 600; color: #4b5563; }
+.money-map__sheets { display: grid; grid-template-columns: 1fr 72px 1fr; gap: 12px; align-items: center; }
+.money-map__sheet { overflow: hidden; }
+.money-map__sheet h4 { margin: 0; padding: 7px 12px; background: #eef3f8; border-bottom: 1px solid #c6d4e0; font-size: 13px; color: #334155; }
+.money-map__sheet dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.money-map__sheet dt, .money-map__sheet dd { margin: 0; padding: 9px 11px; font-size: 12px; line-height: 1.45; }
+.money-map__sheet dt { border-right: 1px solid #d7e0e8; color: #64748b; }
+.money-map__sheet dd { font-weight: 600; color: #1f3f5d; }
+.money-map__mirror { display: grid; gap: 10px; text-align: center; color: #6b88a4; font-size: 11px; }
+.money-map__mirror span { display: block; border-top: 2px solid #9bb9d4; padding-top: 3px; }
+.money-map__takeaways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.money-map__takeaway { padding: 12px 14px; border-color: #d4c28e; background: #fffdf6; }
+.money-map__takeaway strong { display: block; color: #765719; font-size: 13px; margin-bottom: 3px; }
+.money-map__takeaway span { color: #5b6470; font-size: 12px; line-height: 1.45; }
+.rate-map { padding: 0; }
+.rate-map__head { display: grid; grid-template-columns: 1fr 72px 1.35fr; gap: 12px; align-items: center; }
+.rate-map__node { min-height: 86px; padding: 13px 15px; }
+.rate-map__node--anchor { background: #eaf3fc; border-color: #7fa8d0; }
+.rate-map__node--outcome { background: #fdf9ef; border-color: #c7b07b; }
+.rate-map__arrow { margin: 0 4px; }
+.rate-map__lane { display: grid; grid-template-columns: 92px 1fr 40px 1fr 40px 1fr; gap: 9px; align-items: center; margin-top: 14px; }
+.rate-map__lane-label { font-size: 12px; font-weight: 600; color: #52667b; }
+.rate-map__lane .rate-map__node { min-height: 62px; padding: 10px 12px; }
+.rate-map__lane .rate-map__node strong { font-size: 14px; }
+.rate-map__lane .rate-map__arrow { height: 2px; }
+.rate-map__lane--credit .rate-map__node { border-color: #c7b07b; background: #fffdf6; }
+.rate-map__lane--credit .rate-map__arrow { background: #c7b07b; }
+.rate-map__lane--credit .rate-map__arrow::after { border-left-color: #c7b07b; }
+.rate-map__lane--bond .rate-map__node { border-color: #a7c7b1; background: #f4faf5; }
+.rate-map__lane--bond .rate-map__arrow { background: #8eb79b; }
+.rate-map__lane--bond .rate-map__arrow::after { border-left-color: #8eb79b; }
+.rate-map__support { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 0 101px; padding: 10px 12px; border-style: dashed; border-color: #b9cfe3; background: #fff; }
+.rate-map__support strong { color: #315b82; font-size: 13px; }
+.rate-map__support span { color: var(--muted); font-size: 12px; }
+.rate-map__legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 13px 0 0 101px; color: var(--muted); font-size: 12px; }
+.rate-map__legend i { display: inline-block; width: 18px; height: 3px; margin-right: 4px; vertical-align: middle; background: #8fb8de; }
+.rate-map__legend i.credit { background: #c7b07b; }
+.rate-map__legend i.bond { background: #8eb79b; }
+/* 利率走廊：宽度比较与相对政策利率的操作区间分开呈现。 */
+.corridor-figure { margin: 1.4em 0 1.8em; padding: 25px 25px 17px; background: #fff; border: 1px solid var(--line); border-top: 4px solid #177a73; line-height: 1.5; }
+.corridor-figure h3 { margin: 0 0 4px; font-size: 18px; }
+.corridor-figure__lead, .corridor-figure__note { margin: 0; color: var(--muted); font-size: 13px; }
+.corridor-figure__rows { display: grid; gap: 12px; margin-top: 23px; }
+.corridor-figure__row { display: grid; grid-template-columns: 160px minmax(0,1fr) 72px; align-items: center; gap: 12px; }
+.corridor-figure__label { font-size: 12px; line-height: 1.35; }
+.corridor-figure__label strong { display: block; font-size: 13px; }
+.corridor-figure__track { height: 22px; border-left: 1px solid #9caeaf; display: flex; align-items: center; background: repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),#eef2f1 calc(25% - 1px),#eef2f1 25%); }
+.corridor-figure__bar { width: var(--width); height: 13px; background: var(--bar); position: relative; }
+.corridor-figure__bar::after { content: ""; position: absolute; right: 0; top: -4px; height: 21px; width: 2px; background: var(--bar); }
+.corridor-figure__value { text-align: right; font-size: 21px; font-weight: 750; color: var(--bar); font-variant-numeric: tabular-nums; }
+.corridor-figure__value small { font-size: 11px; color: var(--muted); }
+.corridor-figure__scale { display: flex; justify-content: space-between; margin: 6px 84px 0 172px; color: var(--muted); font-size: 11px; }
+.corridor-figure__band { margin-top: 29px; padding-top: 18px; border-top: 1px solid var(--line); }
+.corridor-figure__band-title { margin: 0 0 10px; font-size: 13px; font-weight: 700; }
+.corridor-figure__band-chart { max-width: 560px; margin: 0 auto; }
+.corridor-figure__axis { position: relative; margin-left: 74px; height: 26px; border-bottom: 1px solid #9cacaa; }
+.corridor-figure__axis span { position: absolute; bottom: 3px; transform: translateX(-50%); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.corridor-figure__axis span:first-child { left: 0; transform: none; }
+.corridor-figure__axis span:nth-child(2) { left: 25%; }
+.corridor-figure__axis span:nth-child(3) { left: 50%; }
+.corridor-figure__axis span:nth-child(4) { left: 75%; }
+.corridor-figure__axis span:last-child { right: 0; transform: none; }
+.corridor-figure__band-row { display: grid; grid-template-columns: 74px 1fr; height: 40px; align-items: center; font-size: 12px; }
+.corridor-figure__band-track { height: 28px; position: relative; background: linear-gradient(90deg,transparent calc(50% - .5px),#cad4d2 calc(50% - .5px),#cad4d2 calc(50% + .5px),transparent calc(50% + .5px)); }
+.corridor-figure__fill { position: absolute; top: 8px; height: 12px; left: var(--left); width: var(--width); background: var(--bar); }
+.corridor-figure__fill::before, .corridor-figure__fill::after { content: ""; position: absolute; top: -4px; width: 2px; height: 20px; background: var(--bar); }
+.corridor-figure__fill::before { left: 0; }.corridor-figure__fill::after { right: 0; }
+.corridor-figure__note { margin-top: 15px; }
+.corridor-figure figcaption { border-top: 1px solid var(--line); margin-top: 17px; padding-top: 9px; color: var(--muted); font-size: 12px; }
+@media (max-width: 700px) {
+  .money-map__flow { grid-template-columns: 1fr; gap: 8px; }
+  .money-map__arrow { width: 3px; height: 30px; margin: 0 auto; }
+  .money-map__arrow::after { right: auto; left: 50%; top: auto; bottom: -1px; transform: translateX(-50%); border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid #8fb8de; border-bottom: 0; }
+  .money-map__arrow--credit::after { border-left-color: transparent; border-top-color: #c7b07b; }
+  .money-map__arrow span { left: 18px; top: 50%; transform: translateY(-50%); }
+  .money-map__sheets, .money-map__takeaways, .rate-map__head, .rate-map__support { grid-template-columns: 1fr; }
+  .money-map__mirror { grid-template-columns: 1fr 1fr; }
+  .money-map__mirror span { border-top: 0; border-left: 2px solid #9bb9d4; padding: 0 0 0 4px; }
+  .rate-map__lane { grid-template-columns: 1fr; gap: 7px; margin-left: 0; }
+  .rate-map__lane-label { margin-top: 10px; }
+  .rate-map__lane .rate-map__arrow { width: 3px; height: 22px; margin: 0 auto; }
+  .rate-map__lane .rate-map__arrow::after { right: auto; left: 50%; top: auto; bottom: -1px; transform: translateX(-50%); border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #8fb8de; border-bottom: 0; }
+  .rate-map__lane--credit .rate-map__arrow::after { border-top-color: #c7b07b; }
+  .rate-map__lane--bond .rate-map__arrow::after { border-left-color: transparent; border-top-color: #8eb79b; }
+  .rate-map__support, .rate-map__legend { margin-left: 0; }
+}
+
+@media print { .a > .pop, .a-row .pop { display: none !important; } }
+</style>
+</head>
+<body>
+<main>
+<figure class="corridor-figure" aria-labelledby="corridor-title">
+  <h3 id="corridor-title">从 275bp 的宽走廊，到 50bp 的临时区间</h3>
+  <p class="corridor-figure__lead">上图比较上下限距离；下图只画临时操作区间相对政策利率的位置。</p>
+  <div class="corridor-figure__rows" role="img" aria-label="2022 年原有走廊宽 275 基点；2024 年临时操作区间宽 70 基点；2026 年临时操作区间宽 50 基点">
+    <div class="corridor-figure__row" style="--bar:#63727a"><div class="corridor-figure__label"><strong>2022 原有走廊</strong>超储 0.35% 至 7 天 SLF 3.10%</div><div class="corridor-figure__track"><div class="corridor-figure__bar" style="--width:100%"></div></div><div class="corridor-figure__value">275<small>bp</small></div></div>
+    <div class="corridor-figure__row" style="--bar:#c39438"><div class="corridor-figure__label"><strong>2024.7 临时区间</strong>政策利率 −20 / +50bp</div><div class="corridor-figure__track"><div class="corridor-figure__bar" style="--width:25.45%"></div></div><div class="corridor-figure__value">70<small>bp</small></div></div>
+    <div class="corridor-figure__row" style="--bar:#177a73"><div class="corridor-figure__label"><strong>2026.6 临时区间</strong>政策利率 ±25bp</div><div class="corridor-figure__track"><div class="corridor-figure__bar" style="--width:18.18%"></div></div><div class="corridor-figure__value">50<small>bp</small></div></div>
+  </div>
+  <div class="corridor-figure__scale"><span>0</span><span>区间宽度（bp，同一比例尺）</span><span>275</span></div>
+  <div class="corridor-figure__band">
+    <p class="corridor-figure__band-title">临时区间相对 7 天期逆回购操作利率</p>
+    <div class="corridor-figure__band-chart" role="img" aria-label="2024 年临时区间为政策利率减 20 到加 50 基点；2026 年为上下各 25 基点">
+      <div class="corridor-figure__axis"><span>−50</span><span>−25</span><span>政策利率 0</span><span>+25</span><span>+50bp</span></div>
+      <div class="corridor-figure__band-row" style="--bar:#c39438"><strong>2024.7</strong><div class="corridor-figure__band-track"><div class="corridor-figure__fill" style="--left:30%;--width:70%"></div></div></div>
+      <div class="corridor-figure__band-row" style="--bar:#177a73"><strong>2026.6</strong><div class="corridor-figure__band-track"><div class="corridor-figure__fill" style="--left:25%;--width:50%"></div></div></div>
+    </div>
+    <p class="corridor-figure__note">临时操作区间并未取代原有“超储—SLF”走廊；央行称近两年 DR001 一直运行在临时区间内。</p>
+  </div>
+  <figcaption><span class="a" tabindex="0">图 3｜原有走廊 275bp = 3.10% − 0.35%，按报告时点计算；2024、2026 两行是临时操作利率区间，制度边界不同。<span class="pop"><span class="src">出处：手册三 §2.2（p.24）；央行更新：2024Q2 货政报告·专栏 2《进一步健全市场化的利率调控机制》；2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br>原研报给出的原有走廊上下限为 3.10% 与 0.35%；2024 年临时区间为政策利率 −20 / +50bp，2026 年收窄为 ±25bp。对应原文摘录见本节下方“利率走廊”与“利率走廊实际收窄”两条批注。</span></span></figcaption>
+</figure>
+</main>
+<script>
+(function () {
+  function place(el) {
+    var pop = el.querySelector('.pop');
+    if (!pop) return;
+    pop.style.display = 'block';
+    var pw = Math.min(560, innerWidth * 0.82);
+    pop.style.position = 'fixed';
+    pop.style.width = pw + 'px';
+    var r = el.getBoundingClientRect(), ph = pop.offsetHeight;
+    var top = r.bottom + 8;
+    if (top + ph > innerHeight - 8) top = r.top - ph - 8;
+    if (top < 8) top = 8;
+    var left = r.left;
+    if (left + pw > innerWidth - 8) left = innerWidth - 8 - pw;
+    if (left < 8) left = 8;
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+  }
+  function hide(el) {
+    var pop = el.querySelector('.pop');
+    if (!pop) return;
+    pop.style.display = '';
+    pop.style.position = '';
+  }
+  document.querySelectorAll('.a, .a-row').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { place(el); });
+    el.addEventListener('focus', function () { place(el); });
+    el.addEventListener('mouseleave', function () { hide(el); });
+    el.addEventListener('blur', function () { hide(el); });
+  });
+})();
+</script>
+</body>
+</html>
