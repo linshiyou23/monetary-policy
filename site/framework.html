@@ -61,18 +61,77 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 .a.grn > .pop, .grn > .pop { background: #f2fbf5; border-color: #a5d6ad; color: #17401f; }
 .a.grn > .pop .src, .grn > .pop .src { color: #0a7d32; }
 
-/* 流程图组件（利率体系示意，节点可挂悬停批注） */
-.dg { position: relative; width: 808px; max-width: 100%; height: 262px; margin: 1.4em auto 1.2em; font-size: 15px; }
-.dg .cap { position: absolute; top: -8px; width: 185px; text-align: center; font-weight: 600; font-size: 14.5px; color: #333; }
-.dg .grp { position: absolute; width: 185px; border: 2px dashed #cc6666; border-radius: 12px; }
-.dg .nd { position: absolute; width: 165px; height: 54px; background: #fdfdfd; border: 1.5px solid #7fa8d0; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.3; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
-.dg .nd .sub { font-size: 11px; color: #0b62c4; line-height: 1.25; }
-.dg .nd .subg { font-size: 11px; color: #0a7d32; line-height: 1.25; }
-.dg .cb { position: absolute; width: 106px; height: 150px; border-radius: 50%; background: #eaf3fc; border: 1.5px solid #7fa8d0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
-.dg svg.wire { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.dg .chip { position: absolute; font-size: 12px; color: #555; background: #fff; border-radius: 4px; padding: 1px 7px; white-space: nowrap; line-height: 1.5; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff; }
-.dg .chip b { color: #333; font-weight: 600; }
-.dgcap { font-size: 13px; color: var(--muted); margin: .3em 0 1.4em; }
+/* 结构与传导信息图 */
+.money-map, .rate-map { margin: 1.5em 0 1.8em; color: var(--ink); }
+.money-map figcaption, .rate-map figcaption { margin-top: .65em; color: var(--muted); font-size: 13px; }
+.money-map__flow { position: relative; display: grid; grid-template-columns: 1fr 72px 1.25fr 72px 1fr; align-items: center; gap: 12px; }
+.money-map__node, .money-map__sheet, .money-map__takeaway, .rate-map__node, .rate-map__support { background: #fff; border: 1px solid #b9cfe3; border-radius: 10px; }
+.money-map__node { min-height: 108px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; }
+.money-map__node strong, .rate-map__node strong { color: #0b5394; font-size: 16px; }
+.money-map__node small, .rate-map__node small { display: block; color: var(--muted); line-height: 1.45; margin-top: 4px; }
+.money-map__node--bank { border-color: #7fa8d0; background: #f2f7fc; }
+.money-map__node--entity { border-color: #c7b07b; background: #fdf9ef; }
+.money-map__arrow, .rate-map__arrow { position: relative; height: 3px; background: #8fb8de; border-radius: 3px; }
+.money-map__arrow::after, .rate-map__arrow::after { content: ""; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); border-left: 10px solid #8fb8de; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+.money-map__arrow span { position: absolute; left: 50%; top: -30px; transform: translateX(-50%); white-space: nowrap; color: #315b82; font-size: 12px; }
+.money-map__arrow--credit { background: #c7b07b; }
+.money-map__arrow--credit::after { border-left-color: #c7b07b; }
+.money-map__loop { margin-top: 18px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.money-map__loop-title { margin: 0 0 12px; text-align: center; font-size: 13px; font-weight: 600; color: #4b5563; }
+.money-map__sheets { display: grid; grid-template-columns: 1fr 72px 1fr; gap: 12px; align-items: center; }
+.money-map__sheet { overflow: hidden; }
+.money-map__sheet h4 { margin: 0; padding: 7px 12px; background: #eef3f8; border-bottom: 1px solid #c6d4e0; font-size: 13px; color: #334155; }
+.money-map__sheet dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.money-map__sheet dt, .money-map__sheet dd { margin: 0; padding: 9px 11px; font-size: 12px; line-height: 1.45; }
+.money-map__sheet dt { border-right: 1px solid #d7e0e8; color: #64748b; }
+.money-map__sheet dd { font-weight: 600; color: #1f3f5d; }
+.money-map__mirror { display: grid; gap: 10px; text-align: center; color: #6b88a4; font-size: 11px; }
+.money-map__mirror span { display: block; border-top: 2px solid #9bb9d4; padding-top: 3px; }
+.money-map__takeaways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.money-map__takeaway { padding: 12px 14px; border-color: #d4c28e; background: #fffdf6; }
+.money-map__takeaway strong { display: block; color: #765719; font-size: 13px; margin-bottom: 3px; }
+.money-map__takeaway span { color: #5b6470; font-size: 12px; line-height: 1.45; }
+.rate-map { padding: 0; }
+.rate-map__head { display: grid; grid-template-columns: 1fr 72px 1.35fr; gap: 12px; align-items: center; }
+.rate-map__node { min-height: 86px; padding: 13px 15px; }
+.rate-map__node--anchor { background: #eaf3fc; border-color: #7fa8d0; }
+.rate-map__node--outcome { background: #fdf9ef; border-color: #c7b07b; }
+.rate-map__arrow { margin: 0 4px; }
+.rate-map__lane { display: grid; grid-template-columns: 92px 1fr 40px 1fr 40px 1fr; gap: 9px; align-items: center; margin-top: 14px; }
+.rate-map__lane-label { font-size: 12px; font-weight: 600; color: #52667b; }
+.rate-map__lane .rate-map__node { min-height: 62px; padding: 10px 12px; }
+.rate-map__lane .rate-map__node strong { font-size: 14px; }
+.rate-map__lane .rate-map__arrow { height: 2px; }
+.rate-map__lane--credit .rate-map__node { border-color: #c7b07b; background: #fffdf6; }
+.rate-map__lane--credit .rate-map__arrow { background: #c7b07b; }
+.rate-map__lane--credit .rate-map__arrow::after { border-left-color: #c7b07b; }
+.rate-map__lane--bond .rate-map__node { border-color: #a7c7b1; background: #f4faf5; }
+.rate-map__lane--bond .rate-map__arrow { background: #8eb79b; }
+.rate-map__lane--bond .rate-map__arrow::after { border-left-color: #8eb79b; }
+.rate-map__support { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 0 101px; padding: 10px 12px; border-style: dashed; border-color: #b9cfe3; background: #fff; }
+.rate-map__support strong { color: #315b82; font-size: 13px; }
+.rate-map__support span { color: var(--muted); font-size: 12px; }
+.rate-map__legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 13px 0 0 101px; color: var(--muted); font-size: 12px; }
+.rate-map__legend i { display: inline-block; width: 18px; height: 3px; margin-right: 4px; vertical-align: middle; background: #8fb8de; }
+.rate-map__legend i.credit { background: #c7b07b; }
+.rate-map__legend i.bond { background: #8eb79b; }
+@media (max-width: 700px) {
+  .money-map__flow { grid-template-columns: 1fr; gap: 8px; }
+  .money-map__arrow { width: 3px; height: 30px; margin: 0 auto; }
+  .money-map__arrow::after { right: auto; left: 50%; top: auto; bottom: -1px; transform: translateX(-50%); border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid #8fb8de; border-bottom: 0; }
+  .money-map__arrow--credit::after { border-left-color: transparent; border-top-color: #c7b07b; }
+  .money-map__arrow span { left: 18px; top: 50%; transform: translateY(-50%); }
+  .money-map__sheets, .money-map__takeaways, .rate-map__head, .rate-map__support { grid-template-columns: 1fr; }
+  .money-map__mirror { grid-template-columns: 1fr 1fr; }
+  .money-map__mirror span { border-top: 0; border-left: 2px solid #9bb9d4; padding: 0 0 0 4px; }
+  .rate-map__lane { grid-template-columns: 1fr; gap: 7px; margin-left: 0; }
+  .rate-map__lane-label { margin-top: 10px; }
+  .rate-map__lane .rate-map__arrow { width: 3px; height: 22px; margin: 0 auto; }
+  .rate-map__lane .rate-map__arrow::after { right: auto; left: 50%; top: auto; bottom: -1px; transform: translateX(-50%); border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #8fb8de; border-bottom: 0; }
+  .rate-map__lane--credit .rate-map__arrow::after { border-top-color: #c7b07b; }
+  .rate-map__lane--bond .rate-map__arrow::after { border-left-color: transparent; border-top-color: #8eb79b; }
+  .rate-map__support, .rate-map__legend { margin-left: 0; }
+}
 
 @media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
@@ -87,6 +146,29 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 </blockquote>
 <hr />
 <h2>1. 总纲：二级银行体系与货币创造</h2>
+<figure class="money-map" aria-labelledby="money-map-caption">
+  <div class="money-map__flow">
+    <div class="money-map__node a" tabindex="0"><strong>央行</strong><small>创造基础货币<br>通过政策工具调节银行体系流动性</small><span class="pop"><span class="src">出处：手册一 §1.2</span>（手册一 p.6）<br>原文：“央行通过各类货币政策工具向商业银行投放基础货币。”</span></div>
+    <div class="money-map__arrow"><span>基础货币投放</span></div>
+    <div class="money-map__node money-map__node--bank a" tabindex="0"><strong>商业银行体系</strong><small>货币创造的直接主体<br>贷款创造存款，信用派生消耗超储</small><span class="pop"><span class="src">出处：手册一 §1.2</span>（手册一 p.6）<br>原文：“商业银行则通过发放贷款的方式进行信用派生。……个人和企业持有的货币（广义货币）则是由银行创造出来的（贷款创造存款）。”</span></div>
+    <div class="money-map__arrow money-map__arrow--credit"><span>贷款创造存款</span></div>
+    <div class="money-map__node money-map__node--entity"><strong>居民与实体企业</strong><small>获得贷款，持有银行存款<br>存款计入广义货币</small></div>
+  </div>
+  <div class="money-map__loop">
+    <p class="money-map__loop-title">一笔 5000 亿 MLF 的资产负债表联动</p>
+    <div class="money-map__sheets">
+      <div class="money-map__sheet a" tabindex="0"><h4>央行资产负债表</h4><dl><dt>资产端</dt><dd>对其他存款性公司债权<br>＋5000 亿</dd><dt>负债端</dt><dd>储备货币—超额存款准备金<br>＋5000 亿</dd></dl><span class="pop"><span class="src">出处：手册一 §1.2</span>（手册一 p.7）<br>原文：“比如12 月，央行投放了5000 亿的MLF，体现在央行资产负债表上央行资产端“对其他存款性公司债权”增加5000 亿，负债端“储备货币—超额存款准备金”增加5000 亿。”</span></div>
+      <div class="money-map__mirror"><span>同一笔操作</span><span>两张表同步扩张</span></div>
+      <div class="money-map__sheet"><h4>商业银行资产负债表</h4><dl><dt>资产端</dt><dd>超额存款准备金<br>＋5000 亿</dd><dt>负债端</dt><dd>向央行借款<br>＋5000 亿</dd></dl></div>
+    </div>
+  </div>
+  <div class="money-map__takeaways">
+    <div class="money-map__takeaway a" tabindex="0"><strong>货币乘数是事后恒等式</strong><span>M2 创造取决于银行行为与实体融资需求，不是央行投放基础货币的固定结果。</span><span class="pop"><span class="src">出处：手册一 §2.2.1</span>（手册一 p.29）<br>原文：“货币乘数其实是一种事后的恒等式结果，并不存在分子和分母之间的直接逻辑关联。”</span></div>
+    <div class="money-map__takeaway a" tabindex="0"><strong>调控抓手是三大约束</strong><span>流动性、资本、利率共同约束银行的信用派生。</span><span class="pop"><span class="src">出处：手册五 引言；手册二 §2.3</span>（手册五 p.1）<br>原文：“通过完善中央银行调节银行货币创造的流动性、资本和利率三大约束的长效机制来调控货币供应。”</span></div>
+    <div class="money-map__takeaway a" tabindex="0"><strong>扩表不等于放水</strong><span>短期看超储率变化，长期看法定准备金率对货币创造能力的约束。</span><span class="pop"><span class="src">出处：手册一 §2.0</span>（手册一 p.12）<br>原文：“短期要看超额准备金率的变化，长期关键要看法定准备金率对银行货币创造能力约束的变化。”</span></div>
+  </div>
+  <figcaption id="money-map-caption">图 1｜央行投放基础货币，商业银行贷款创造存款；贷款派生后的缴准需求构成对银行流动性的约束。中间账表示一笔 MLF 操作，并不表示它自动派生等额贷款。</figcaption>
+</figure>
 <ul>
 <li><span class="a" tabindex="0">我国实行"央行—商业银行"二级运行模式：央行创造<strong>基础货币</strong>，商业银行通过"贷款创造存款"派生<strong>广义货币</strong>；信用派生会消耗超储，央行通过调节银行体系流动性（法定准备金率等）对银行信用派生提供"支持和约束"。<span class="pop"><span class="src">出处：手册一 §1.2</span>（手册一 p.6）<br>原文：“在目前的“央行—商业银行”运行模式下，央行通过各类货币政策工具向商业银行投放基础货币，商业银行则通过发放贷款的方式进行信用派生。……个人和企业持有的货币（广义货币）则是由银行创造出来的（贷款创造存款），央行的基础货币创造行为则为银行的信用派生行为提供支持（信用派生消耗超储）。”</span></span></li>
 <li><span class="a" tabindex="0">央行通过货币政策工具（MLF、碳减排支持工具、再贷款等）向银行投放基础货币：如投放 5000 亿 MLF，央行资产端"对其他存款性公司债权"与负债端"储备货币—超额存款准备金"各增 5000 亿。<span class="pop"><span class="src">出处：手册一 §1.2</span>（手册一 p.7）<br>原文：“在目前的流动性框架下，央行通过各项货币政策工具（比如MLF、碳减排支持工具、再贷款等）向商业银行提供基础货币。 比如12 月，央行投放了5000 亿的MLF，体现在央行资产负债表上央行资产端“对其他存款性公司债权”增加5000 亿，负债端“储备货币—超额存款准备金”增加5000 亿。”</span></span></li>
@@ -143,28 +225,34 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <span class="q">“中国人民银行应市场需要增加隔夜逆回购操作品种，并在今年6月末首次开展操作。”</span><br>
 <span class="q">“结合一级交易商需求，逐步增加隔夜逆回购的操作频率，进一步畅通政策利率向市场利率的传导。”</span>
 </span></span></h3>
-<div class="dgwrap">
-<div class="dg" id="dgF">
-  <div class="cap" style="left:213px">央行政策利率</div>
-  <div class="cap" style="left:418px">市场基准利率</div>
-  <div class="cap" style="left:623px">市场利率</div>
-  <div class="grp" style="left:213px; top:14px; height:168px"></div>
-  <div class="grp" style="left:418px; top:14px; height:246px"></div>
-  <div class="grp" style="left:623px; top:14px; height:246px"></div>
-  <div class="cb" id="F-cb" style="left:0; top:26px">央&nbsp;行</div>
-  <div class="nd a upd" id="F-r1" tabindex="0" style="left:225px; top:34px">7天逆回购利率<span class="sub">主要政策利率</span><span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“一是明确7天期逆回购操作利率是主要政策利率，传递短端利率调控的目标水平。2024年7月，公开市场7天期逆回购操作从竞争性利率招标调整为固定利率、充分满足一级交易商需求，消除了操作利率变化的不确定性，利率水平作为短端利率定价“锚”的作用进一步增强。”</span></span></div>
-  <div class="nd a upd" id="F-n2" tabindex="0" style="left:430px; top:34px">DR001<span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“2025年起，短端利率调控目标从过去的DR007逐步转向DR001，2026年以来进一步向市场明确传递了目标利率转隔夜的信号。”</span></span></div>
-  <div class="nd" id="F-n3" style="left:635px; top:34px">货币市场利率</div>
-  <div class="nd a upd" id="F-m2" tabindex="0" style="left:430px; top:114px">LPR<span class="sub">报价参考短端政策利率</span><span class="pop"><span class="src">央行更新：2024Q2 货政报告·专栏 2《进一步健全市场化的利率调控机制》</span><br><span class="q">“以2024年7月为例，当月15日MLF利率未作调整，22日7天期逆回购操作利率下降10个基点，同日报出的LPR迅速作出反应并跟随调整，也表明LPR报价转向更多参考央行短期政策利率，由短及长的利率传导关系在逐步理顺。”</span></span></div>
-  <div class="nd" id="F-m3" style="left:635px; top:114px">信贷市场利率</div>
-  <div class="nd a upd" id="F-b1" tabindex="0" style="left:225px; top:194px">国债收益率<span class="pop"><span class="src">央行更新：2024Q4 货政报告·专栏 1《进一步完善央行公开市场操作体系》</span><br><span class="q">“2024年8月起，中国人民银行在公开市场操作中逐步增加国债买卖，并定位于基础货币投放和流动性管理工具，有买有卖、双向开展。2024年累计净买入国债1万亿元”</span></span></div>
-  <div class="nd" id="F-b2" style="left:430px; top:194px">收益率曲线</div>
-  <div class="nd" id="F-b3" style="left:635px; top:194px">债券市场利率</div>
-  
-  <svg class="wire" viewBox="0 0 808 262"></svg>
-</div>
-</div>
-<p class="dgcap">注：示意图对应寇文红博士《2024年6月以来我国央行对利率体系和调控框架的改革》图 3。<span class="a grn" tabindex="0">央行已于 2026 年 10 月 19 日宣布将研究择机把 OMO 主要操作品种切换为隔夜——正式切换前，主要政策利率仍为 7 天期逆回购操作利率，图中按现状绘制。<span class="pop"><span class="src">观点补充：寇文红博士《2024年6月以来我国央行对利率体系和调控框架的改革》（含 2026.10.19 金融街论坛讲话要点）</span><br><span class="q">“为了进一步提高利率调控的精准性，央行将研究择机把央行OMO主要操作品种的期限切换为隔夜，隔夜回购利率将相应成为主要政策利率。”</span></span></span>蓝色小字为相对研报时点（2022 年中）的变化，悬停节点可查批注。</p>
+<figure class="rate-map" aria-labelledby="rate-map-caption">
+  <div class="rate-map__head">
+    <div class="rate-map__node rate-map__node--anchor a upd" tabindex="0"><strong>7 天期逆回购操作利率</strong><small>当前主要政策利率<br>调控目标逐步转向 DR001</small><span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“一是明确7天期逆回购操作利率是主要政策利率，传递短端利率调控的目标水平。”</span><br><span class="q">“2025年起，短端利率调控目标从过去的DR007逐步转向DR001，2026年以来进一步向市场明确传递了目标利率转隔夜的信号。”</span></span></div>
+    <div class="rate-map__arrow"></div>
+    <div class="rate-map__node rate-map__node--outcome"><strong>市场定价</strong><small>政策信号通过多个市场逐步传递</small></div>
+  </div>
+  <div class="rate-map__lane">
+    <div class="rate-map__lane-label">短端市场</div>
+    <div class="rate-map__node a upd" tabindex="0"><strong>DR001</strong><small>隔夜利率目标</small><span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“近两年来DR001也一直运行在临时正/逆回购利率区间内。”</span></span></div><div class="rate-map__arrow"></div>
+    <div class="rate-map__node"><strong>货币市场利率</strong><small>围绕政策利率中枢波动</small></div><div class="rate-map__arrow"></div>
+    <div class="rate-map__node"><strong>资金成本</strong><small>银行间流动性与金融条件</small></div>
+  </div>
+  <div class="rate-map__lane rate-map__lane--credit">
+    <div class="rate-map__lane-label">信贷市场</div>
+    <div class="rate-map__node a upd" tabindex="0"><strong>LPR</strong><small>报价更多参考短端政策利率</small><span class="pop"><span class="src">央行更新：2024Q2 货政报告·专栏 2《进一步健全市场化的利率调控机制》</span><br><span class="q">“LPR报价转向更多参考央行短期政策利率，由短及长的利率传导关系在逐步理顺。”</span></span></div><div class="rate-map__arrow"></div>
+    <div class="rate-map__node"><strong>贷款利率</strong><small>企业与居民融资价格</small></div><div class="rate-map__arrow"></div>
+    <div class="rate-map__node"><strong>融资需求</strong><small>投资、消费与信用派生</small></div>
+  </div>
+  <div class="rate-map__lane rate-map__lane--bond">
+    <div class="rate-map__lane-label">债券市场</div>
+    <div class="rate-map__node a upd" tabindex="0"><strong>国债买卖</strong><small>长期流动性管理工具</small><span class="pop"><span class="src">央行更新：2024Q4 货政报告·专栏 1《进一步完善央行公开市场操作体系》</span><br><span class="q">“2024年8月起，中国人民银行在公开市场操作中逐步增加国债买卖，并定位于基础货币投放和流动性管理工具，有买有卖、双向开展。”</span></span></div><div class="rate-map__arrow"></div>
+    <div class="rate-map__node"><strong>收益率曲线</strong><small>期限结构与预期</small></div><div class="rate-map__arrow"></div>
+    <div class="rate-map__node"><strong>债券融资条件</strong><small>市场定价与资产配置</small></div>
+  </div>
+  <div class="rate-map__support"><div><strong>中期流动性</strong><br><span>MLF、买断式逆回购：工具定位更清晰，MLF 利率退出政策利率功能。</span></div><div><strong>传导的现实约束</strong><br><span>银行风险偏好、抵押品、实体融资需求和金融市场预期会影响传导速度与幅度。</span></div></div>
+  <div class="rate-map__legend"><span><i></i>短端利率传导</span><span><i class="credit"></i>信贷传导</span><span><i class="bond"></i>债券传导</span></div>
+  <figcaption id="rate-map-caption">图 2｜从主要政策利率到金融条件：短端、信贷和债券三条路径并行。箭头表示影响方向，不表示一对一或同步变动；国债买卖是独立的流动性管理与债券市场操作。</figcaption>
+</figure>
 <ul>
 <li><span class="a" tabindex="0"><strong>OMO（7 天逆回购）利率＝短期政策利率</strong>，每日开展操作；<strong>MLF（1 年期）利率＝中期政策利率</strong>，每月月中（一般 15 日，遇节假日顺延）开展操作。<span class="pop"><span class="src">出处：手册三 §2.2；手册四 §1</span>（手册四 p.6）<br>原文：“同时，央行也逐渐形成了每日在公开市场开展逆回购操作来培育短期政策利率（7 天OMO 利率），每个月月中开展MLF 操作来培育中期政策利率（1 年期MLF 利率）的操作模式。”</span></span></li>
 <li><span class="a" tabindex="0">央行引导 <strong>DR007 围绕 OMO 利率为中枢波动</strong>。以 2020 年 6 月—2022 年 2 月为样本，DR007 向上偏离均值约 12.7BP、向下偏离均值约 13.9BP，80 分位约 18.7BP/22.5BP——即市场利率一般在政策利率上下 20BP 左右波动，月底、季末、缴税时点易向上偏离，月初、季初及央行释放宽松信号后易向下偏离。<span class="pop"><span class="src">出处：手册三 §2.2</span>（手册三 p.25）<br>原文：“考虑到这一点我们选取2020 年6 月到2022 年2 月末作为观察时点来进行分析。 在观察期间DR007 向上偏离OMO 利率的均值为12.7 个BP，向下偏离OMO 利率的均值为13.9 个BP，向上、向下偏离的80 分位数分别为18.7个BP 和22.5 个BP。 即统计数据表明一般市场利率会在政策利率上下20 个BP 左右的区间里波动。”</span></span></li>
@@ -524,96 +612,6 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 </main>
 <footer>资料来源：红塔证券《流动性分析手册》系列一至六 · <span class="upd">蓝色部分依据央行《中国货币政策执行报告》专栏文章（2022Q3—2026Q2）补充</span></footer>
 
-<script>
-(function () {
-  var NS = 'http://www.w3.org/2000/svg';
-  function box(dg, id) {
-    var r = dg.querySelector('#' + id).getBoundingClientRect();
-    var R = dg.getBoundingClientRect();
-    return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
-             r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
-  }
-  function ellipseEdge(e, ty) {
-    var a = 53, b = 75, dy = ty - e.cy;
-    var f = Math.max(-0.96, Math.min(0.96, dy / b));
-    return { x: e.cx + a * Math.sqrt(1 - f * f), y: e.cy + b * f };
-  }
-  function poly(svg, pts) {
-    var el = document.createElementNS(NS, 'polygon');
-    el.setAttribute('points', pts.map(function (p) { return p[0] + ',' + p[1]; }).join(' '));
-    el.setAttribute('fill', '#c3daf2');
-    el.setAttribute('stroke', '#8fb8de');
-    el.setAttribute('stroke-width', 1.5);
-    el.setAttribute('stroke-linejoin', 'round');
-    svg.appendChild(el);
-  }
-  function fatLine(svg, p1, p2, w) {
-    w = (w || 15) / 2;
-    var dx = p2.x - p1.x, dy = p2.y - p1.y, L = Math.hypot(dx, dy);
-    var ux = dx / L, uy = dy / L, px = -uy, py = ux, hl = 18, hw = 15;
-    var bx = p2.x - ux * hl, by = p2.y - uy * hl;
-    poly(svg, [[p1.x + px * w, p1.y + py * w], [bx + px * w, by + py * w],
-               [bx + px * hw, by + py * hw], [p2.x, p2.y],
-               [bx - px * hw, by - py * hw], [bx - px * w, by - py * w],
-               [p1.x - px * w, p1.y - py * w]]);
-  }
-  function fatElbowVR(svg, p1, p2, w) {
-    w = (w || 15) / 2; var hl = 18, hw = 15;
-    var bx = p2.x - hl;
-    poly(svg, [[p1.x - w, p1.y], [p1.x - w, p2.y + w], [bx, p2.y + w],
-               [bx, p2.y + hw], [p2.x, p2.y], [bx, p2.y - hw],
-               [bx, p2.y - w], [p1.x + w, p2.y - w], [p1.x + w, p1.y]]);
-  }
-  function dashElbowVR(svg, p1, p2) {
-    var path = document.createElementNS(NS, 'path');
-    path.setAttribute('d', 'M' + p1.x + ',' + p1.y + ' L' + p1.x + ',' + (p2.y - 2) + ' L' + (p2.x - 12) + ',' + (p2.y - 2));
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', '#cc6666');
-    path.setAttribute('stroke-width', 2.5);
-    path.setAttribute('stroke-dasharray', '7 5');
-    svg.appendChild(path);
-    var head = document.createElementNS(NS, 'polygon');
-    head.setAttribute('points', (p2.x - 13) + ',' + (p2.y - 7) + ' ' + p2.x + ',' + p2.y + ' ' + (p2.x - 13) + ',' + (p2.y + 7));
-    head.setAttribute('fill', '#fff');
-    head.setAttribute('stroke', '#cc6666');
-    head.setAttribute('stroke-width', 2);
-    head.setAttribute('stroke-dasharray', '5 4');
-    svg.appendChild(head);
-  }
-  function chip(dg, x, y, html) {
-    var s = document.createElement('span');
-    s.className = 'chip'; s.style.left = x + 'px'; s.style.top = y + 'px'; s.innerHTML = html;
-    dg.appendChild(s);
-  }
-  var dg = document.getElementById('dgF');
-  var svg = dg.querySelector('svg.wire');
-  function box(id) {
-    var r = dg.querySelector('#' + id).getBoundingClientRect();
-    var R = dg.getBoundingClientRect();
-    return { cx: r.left - R.left + r.width / 2, cy: r.top - R.top + r.height / 2,
-             r: r.right - R.left, b: r.bottom - R.top, l: r.left - R.left };
-  }
-  function ellipseEdge(e, ty) {
-    var a = 53, b = 75, dy = ty - e.cy;
-    var f = Math.max(-0.96, Math.min(0.96, dy / b));
-    return { x: e.cx + a * Math.sqrt(1 - f * f), y: e.cy + b * f };
-  }
-  var cb = box('F-cb');
-  var r1 = box('F-r1'), n2 = box('F-n2'), n3 = box('F-n3');
-  var m2 = box('F-m2'), m3 = box('F-m3');
-  var b1 = box('F-b1'), b2 = box('F-b2'), b3 = box('F-b3');
-  fatLine(svg, ellipseEdge(cb, r1.cy), { x: r1.l - 2, y: r1.cy }, 17);
-  fatLine(svg, { x: r1.r - 1, y: r1.cy }, { x: n2.l - 2, y: n2.cy });
-  fatLine(svg, { x: n2.r - 1, y: n2.cy }, { x: n3.l - 2, y: n3.cy });
-  fatElbowVR(svg, { x: r1.cx, y: r1.b + 1 }, { x: m2.l - 2, y: m2.cy }, 12);
-  fatLine(svg, { x: m2.r - 1, y: m2.cy }, { x: m3.l - 2, y: m3.cy });
-  fatElbowVR(svg, { x: cb.cx, y: cb.b + 1 }, { x: b1.l - 2, y: b1.cy }, 15);
-  fatLine(svg, { x: b1.r - 1, y: b1.cy }, { x: b2.l - 2, y: b2.cy });
-  fatLine(svg, { x: b2.r - 1, y: b2.cy }, { x: b3.l - 2, y: b3.cy });
-  chip(dg, 150, 44, '<b>每日开展</b>');
-  chip(dg, 150, b1.cy - 17, '<b>国债交易</b>');
-})();
-</script>
 
 <script>
 (function () {

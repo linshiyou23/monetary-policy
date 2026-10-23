@@ -74,6 +74,40 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 .dg .chip b { color: #333; font-weight: 600; }
 .dgcap { font-size: 13px; color: var(--muted); margin: .3em 0 1.4em; }
 
+/* 六条制度主线总时间轴 */
+.master-timeline { margin: 1.4em 0 2em; }
+.master-timeline__viewport { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: #fbfcfe; }
+.master-timeline__grid { min-width: 780px; padding: 18px 18px 14px; }
+.master-timeline__header, .master-timeline__row { display: grid; grid-template-columns: 136px repeat(8, minmax(76px, 1fr)); }
+.master-timeline__header { align-items: end; border-bottom: 1px solid #c7d3df; padding-bottom: 8px; }
+.master-timeline__header .axis-label { color: var(--muted); font-size: 12px; font-weight: 600; }
+.master-timeline__year { position: relative; color: #5f6f80; font-size: 11px; text-align: center; }
+.master-timeline__year::after { content: ""; position: absolute; left: 50%; top: 23px; width: 1px; height: 16px; background: #c7d3df; }
+.master-timeline__row { min-height: 54px; align-items: center; border-bottom: 1px solid #e4e9ee; }
+.master-timeline__row:last-child { border-bottom: 0; }
+.master-timeline__label { padding-right: 12px; color: #354b62; font-size: 12px; font-weight: 600; line-height: 1.35; }
+.master-timeline__track { grid-column: 2 / 10; display: grid; grid-template-columns: repeat(8, minmax(76px, 1fr)); align-items: center; min-height: 34px; position: relative; background: repeating-linear-gradient(to right, transparent 0, transparent calc(12.5% - 1px), #edf1f5 calc(12.5% - 1px), #edf1f5 12.5%); }
+.master-timeline__segment { z-index: 1; min-height: 32px; margin: 0 4px; padding: 6px 9px; border-radius: 6px; background: #eaf3fc; border: 1px solid #a9c7e1; color: #234d73; font-size: 11px; line-height: 1.35; }
+.master-timeline__segment--warm { background: #fff8e8; border-color: #ddc98f; color: #765719; }
+.master-timeline__segment--green { background: #f1f8f2; border-color: #acd0b3; color: #2f6240; }
+.master-timeline__segment--blue { background: #ddecfb; border-color: #7fa8d0; color: #0b5394; }
+.master-timeline__segment strong { font-weight: 600; }
+.master-timeline__segment::before { content: attr(data-period); display: block; font-size: 11px; opacity: .75; margin-bottom: 3px; }
+.master-timeline__legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 12px 0 0 136px; color: var(--muted); font-size: 12px; }
+.master-timeline__legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; background: #eaf3fc; border: 1px solid #a9c7e1; }
+.master-timeline__legend i.warm { background: #fff8e8; border-color: #ddc98f; }
+.master-timeline__legend i.green { background: #f1f8f2; border-color: #acd0b3; }
+.master-timeline figcaption { margin-top: .65em; color: var(--muted); font-size: 13px; }
+@media (max-width: 640px) {
+  .master-timeline__grid { min-width: 0; padding: 12px 14px; }
+  .master-timeline__header { display: none; }
+  .master-timeline__row { display: block; padding: 10px 0; }
+  .master-timeline__label { display: block; margin-bottom: 7px; font-size: 13px; }
+  .master-timeline__track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; background: none; }
+  .master-timeline__segment { grid-column: auto !important; display: flex; flex-direction: column; justify-content: center; margin: 0; min-height: 62px; padding: 7px 9px; }
+  .master-timeline__legend { margin-left: 0; }
+}
+
 @media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
 </head>
@@ -128,6 +162,21 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 </tr>
 </tbody>
 </table>
+<figure class="master-timeline" aria-labelledby="master-timeline-caption">
+  <div class="master-timeline__viewport">
+    <div class="master-timeline__grid">
+      <div class="master-timeline__header"><div class="axis-label">制度主线</div><div class="master-timeline__year">1984</div><div class="master-timeline__year">1993</div><div class="master-timeline__year">1994/2001</div><div class="master-timeline__year">2008</div><div class="master-timeline__year">2013/14</div><div class="master-timeline__year">2016/19</div><div class="master-timeline__year">2020/24</div><div class="master-timeline__year">2026</div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">基础货币投放</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="1984—1994" style="grid-column:1 / 3"><strong>再贷款</strong><br>主渠道</div><div class="master-timeline__segment master-timeline__segment--warm" data-period="1994/2001—2014" style="grid-column:3 / 5"><strong>外汇占款</strong><br>被动投放</div><div class="master-timeline__segment" data-period="2014 起" style="grid-column:5 / 7"><strong>主动工具</strong><br>OMO、MLF 等</div><div class="master-timeline__segment master-timeline__segment--blue a upd" data-period="2024.8 起" tabindex="0" style="grid-column:7 / 9"><strong>国债买卖</strong><br>立体工具箱<span class="pop"><span class="src">央行更新：2024Q4 货政报告·专栏 1《进一步完善央行公开市场操作体系》</span><br><span class="q">“2024年8月起，中国人民银行在公开市场操作中逐步增加国债买卖，并定位于基础货币投放和流动性管理工具，有买有卖、双向开展。”</span></span></div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">调控方式</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2012 年前" style="grid-column:1 / 4"><strong>数量型为主</strong><br>准备金、央票等</div><div class="master-timeline__segment" data-period="2012—2024" style="grid-column:4 / 7"><strong>向价格型转型</strong><br>利率市场化、LPR</div><div class="master-timeline__segment master-timeline__segment--blue a upd" data-period="2024.7 起" tabindex="0" style="grid-column:7 / 9"><strong>7 天逆回购</strong><br>主要政策利率<span class="pop"><span class="src">央行更新：2026Q2 货政报告·专栏 2《完善短端利率调控机制》</span><br><span class="q">“一是明确7天期逆回购操作利率是主要政策利率，传递短端利率调控的目标水平。”</span></span></div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">操作框架</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="外汇占款时期" style="grid-column:3 / 5"><strong>结构性流动性充裕</strong><br>外汇占款时代</div><div class="master-timeline__segment" data-period="2014 起" style="grid-column:5 / 9"><strong>结构性流动性短缺</strong><br>央行主动补缺口</div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">中介目标</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2012 年前" style="grid-column:1 / 4"><strong>M2 目标增速</strong><br>数量目标</div><div class="master-timeline__segment" data-period="2012 起" style="grid-column:4 / 7"><strong>M2＋社融</strong><br>与名义经济增速基本匹配</div><div class="master-timeline__segment master-timeline__segment--blue" data-period="2024 起" style="grid-column:7 / 9"><strong>淡化数量目标</strong><br>更多发挥利率作用</div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">调控支柱</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2016 年前" style="grid-column:1 / 6"><strong>单支柱</strong><br>货币政策</div><div class="master-timeline__segment master-timeline__segment--green" data-period="2016 起" style="grid-column:6 / 9"><strong>双支柱</strong><br>货币政策＋宏观审慎（2016 起）</div></div></div>
+      <div class="master-timeline__row"><div class="master-timeline__label">理念与工具</div><div class="master-timeline__track"><div class="master-timeline__segment master-timeline__segment--warm" data-period="2020 年前" style="grid-column:1 / 7"><strong>逆周期</strong><br>总量型、间接调控</div><div class="master-timeline__segment master-timeline__segment--green" data-period="2020 起" style="grid-column:7 / 9"><strong>跨周期</strong><br>2020 首提；结构型、直达型</div></div></div>
+    </div>
+  </div>
+  <div class="master-timeline__legend"><span><i class="warm"></i>早期阶段</span><span><i></i>转型阶段</span><span><i class="green"></i>制度成型</span><span><i style="background:#ddecfb;border-color:#7fa8d0"></i>2022 年后政策更新</span></div>
+  <figcaption id="master-timeline-caption">总览图｜六条制度主线的并行演变。横轴按关键节点排列，色块宽度不代表实际持续年数；同一制度在后续阶段可能继续存在。</figcaption>
+</figure>
 <hr />
 <h2>线索一：基础货币投放渠道的变迁</h2>
 <h3>1. 再贷款主渠道时代（1984—1994）</h3>
@@ -818,11 +867,6 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
   chip(150, b1.cy - 17, '<b>国债交易</b>');
   });
 })();
-</script>
-
-<script>
-(function () {
-  function place(el) {})();
 </script>
 
 <script>
