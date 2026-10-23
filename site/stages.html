@@ -60,6 +60,31 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 .grn strong { color: #07642a; }
 .a.grn > .pop, .grn > .pop { background: #f2fbf5; border-color: #a5d6ad; color: #17401f; }
 .a.grn > .pop .src, .grn > .pop .src { color: #0a7d32; }
+/* 阶段与因果链总览：在正文宽度内保留一致的横向阅读顺序。 */
+.stage-map, .chain-map { margin: 1.35em 0 1.7em; padding: 22px 24px 16px; background: #fff; border: 1px solid var(--line); border-top: 4px solid #177a73; line-height: 1.5; }
+.stage-map h3, .chain-map h3 { margin: 0 0 4px; font-size: 18px; }
+.stage-map__lead, .chain-map__lead { margin: 0 0 17px; color: var(--muted); font-size: 13px; }
+.stage-map__head { display: grid; grid-template-columns: 1fr 18px 1fr 18px 1.12fr; gap: 8px; margin-left: 100px; padding: 0 8px 7px; border-bottom: 2px solid #26343a; color: var(--muted); font-size: 11px; font-weight: 700; }
+.stage-map__row { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.stage-map__row:last-of-type { border-bottom: 0; }
+.stage-map__row--update { background: #f3f8fc; margin: 0 -10px; padding: 10px; }
+.stage-map__meta { display: grid; grid-template-columns: 100px 1fr; align-items: baseline; font-size: 12px; }
+.stage-map__date { color: var(--muted); font-variant-numeric: tabular-nums; }
+.stage-map__name { font-size: 13px; font-weight: 700; }
+.stage-map__row--update .stage-map__name { color: #3f6fa6; }
+.stage-map__path { display: grid; grid-template-columns: 1fr 18px 1fr 18px 1.12fr; gap: 8px; margin-left: 100px; align-items: center; font-size: 12px; }
+.stage-map__cell { min-height: 36px; display: flex; align-items: center; padding: 4px 8px; border-left: 2px solid #cfded9; }
+.stage-map__row--update .stage-map__cell { border-color: #c5d9ed; }
+.stage-map__arrow, .chain-map__arrow { text-align: center; color: #85a19b; font-size: 18px; }
+.stage-map figcaption, .chain-map figcaption { border-top: 1px solid var(--line); margin-top: 15px; padding-top: 9px; color: var(--muted); font-size: 12px; }
+.chain-map__head, .chain-map__row { display: grid; grid-template-columns: 33px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr); gap: 8px; align-items: center; }
+.chain-map__head { padding-bottom: 7px; border-bottom: 2px solid #26343a; color: var(--muted); font-size: 11px; font-weight: 700; }
+.chain-map__row { padding: 15px 0; border-bottom: 1px solid var(--line); }
+.chain-map__number { color: #177a73; font-family: Georgia, serif; font-size: 23px; }
+.chain-map__node { min-height: 86px; padding: 11px 10px; border-top: 3px solid var(--node); background: var(--bg); font-size: 12px; }
+.chain-map__node strong { display: block; margin-bottom: 5px; font-size: 13px; }
+.chain-map__update { display: grid; grid-template-columns: 100px 1fr; gap: 10px; margin-top: 16px; padding: 11px 13px; background: #edf4fa; border-left: 3px solid #3f6fa6; font-size: 12px; }
+.chain-map__update strong { color: #3f6fa6; }
 @media print { .a > .pop, .a-row .pop { display: none !important; } }
 </style>
 </head>
@@ -73,6 +98,19 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 </blockquote>
 <hr />
 <h2>总览：各阶段对照表</h2>
+<figure class="stage-map" aria-labelledby="stage-map-title">
+  <h3 id="stage-map-title">经济图景 → 金融结构 → 政策响应</h3>
+  <p class="stage-map__lead">每行提炼最能解释框架变化的一组关系；具体事件和来源见下方各阶段正文。</p>
+  <div class="stage-map__head" aria-hidden="true"><span>经济图景</span><span></span><span>金融结构</span><span></span><span>政策响应</span></div>
+  <div class="stage-map__row"><div class="stage-map__meta"><span class="stage-map__date">1993—2000</span><strong class="stage-map__name">金融体制奠基</strong></div><div class="stage-map__path"><span class="stage-map__cell">专业银行商业化</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">政策性与商业性金融分离</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">政策性信贷与基础货币脱钩，央行报表定雏形</span></div></div>
+  <div class="stage-map__row"><div class="stage-map__meta"><span class="stage-map__date">2001—2008</span><strong class="stage-map__name">出口驱动</strong></div><div class="stage-map__path"><span class="stage-map__cell">入世、双顺差</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">外汇占款被动投放</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">提准、央票回笼，防过热</span></div></div>
+  <div class="stage-map__row"><div class="stage-map__meta"><span class="stage-map__date">2008—2013</span><strong class="stage-map__name">投资驱动</strong></div><div class="stage-map__path"><span class="stage-map__cell">危机刺激、地产基建</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">杠杆上升、影子银行起步</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">数量工具稳增长；钱荒暴露空转</span></div></div>
+  <div class="stage-map__row"><div class="stage-map__meta"><span class="stage-map__date">2014—2016</span><strong class="stage-map__name">增速换挡</strong></div><div class="stage-map__path"><span class="stage-map__cell">经济放缓、外流压力</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">外汇占款拐点、同业扩张</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">央行工具主动投放，对冲下行</span></div></div>
+  <div class="stage-map__row"><div class="stage-map__meta"><span class="stage-map__date">2017—2019</span><strong class="stage-map__name">去杠杆转型</strong></div><div class="stage-map__path"><span class="stage-map__cell">转向高质量发展</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">影子银行收缩、表外回表</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">宏观审慎成型、LPR 改革</span></div></div>
+  <div class="stage-map__row"><div class="stage-map__meta"><span class="stage-map__date">2020—2022</span><strong class="stage-map__name">疫情与跨周期</strong></div><div class="stage-map__path"><span class="stage-map__cell">疫情冲击、三重压力</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">实体需求波动、居民行为变化</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">结构性工具直达，跨周期调节</span></div></div>
+  <div class="stage-map__row stage-map__row--update"><div class="stage-map__meta"><span class="stage-map__date">2023—2026</span><strong class="stage-map__name">框架加速演进</strong></div><div class="stage-map__path"><span class="stage-map__cell">供强需弱、物价低位</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">直接融资上升、传统信贷需求偏弱</span><span class="stage-map__arrow">→</span><span class="stage-map__cell">2025 起适度宽松，利率框架重构</span></div></div>
+  <figcaption><span class="a" tabindex="0">图 1｜前六行为 2022 年《流动性分析手册》归纳，蓝色行为 2023—2026 年更新。箭头是阶段内的解释路径，不表示单一原因。<span class="pop"><span class="src">出处：红塔证券《流动性分析手册》一至六；央行《中国货币政策执行报告》2024Q3、2025Q1、2026Q2 相关专栏</span><br>各阶段的具体事件、报告摘录与央行更新出处见下方总览表及分阶段正文批注。</span></span></figcaption>
+</figure>
 <table>
 <thead>
 <tr>
@@ -294,6 +332,16 @@ footer { max-width: 920px; margin: 14px auto 0; color: var(--muted); font-size: 
 <hr />
 <h2>结语：报告中体现的"经济决定框架"三条因果链</h2>
 <p>六份报告虽为流动性分析手册，但贯穿了清晰的历史叙事，可归纳为三条因果链：</p>
+<figure class="chain-map" aria-labelledby="chain-map-title">
+  <h3 id="chain-map-title">条件变化 → 传导压力 → 框架响应</h3>
+  <p class="chain-map__lead">中间一列说明为什么需要调整；下方三段正文给出完整论证与出处。</p>
+  <div class="chain-map__head" aria-hidden="true"><span></span><span>条件变化</span><span></span><span>传导压力</span><span></span><span>框架响应</span></div>
+  <div class="chain-map__row"><span class="chain-map__number">01</span><div class="chain-map__node" style="--node:#177a73;--bg:#edf6f3"><strong>增长引擎切换</strong>双顺差退潮，外汇占款出现拐点</div><span class="chain-map__arrow">→</span><div class="chain-map__node" style="--node:#79aaa0;--bg:#f2f8f6"><strong>投放渠道改变</strong>基础货币不再主要随外汇流入被动增加</div><span class="chain-map__arrow">→</span><div class="chain-map__node" style="--node:#177a73;--bg:#edf6f3"><strong>主动投放</strong>央行通过政策工具补充流动性</div></div>
+  <div class="chain-map__row"><span class="chain-map__number">02</span><div class="chain-map__node" style="--node:#bd7058;--bg:#fbf2ee"><strong>金融结构变复杂</strong>影子银行与同业信用扩张</div><span class="chain-map__arrow">→</span><div class="chain-map__node" style="--node:#d7a190;--bg:#fdf7f4"><strong>数量约束趋弱</strong>单看 M2 难以刻画信用，空转风险积累</div><span class="chain-map__arrow">→</span><div class="chain-map__node" style="--node:#bd7058;--bg:#fbf2ee"><strong>双支柱</strong>价格型调控与宏观审慎并进</div></div>
+  <div class="chain-map__row"><span class="chain-map__number">03</span><div class="chain-map__node" style="--node:#c39438;--bg:#fbf7ea"><strong>发展目标改变</strong>高质量发展要求融资支持新领域</div><span class="chain-map__arrow">→</span><div class="chain-map__node" style="--node:#d6bd7e;--bg:#fcf9f0"><strong>信用结构调整</strong>地产、基建主导的旧模式难以持续</div><span class="chain-map__arrow">→</span><div class="chain-map__node" style="--node:#c39438;--bg:#fbf7ea"><strong>定向与直达</strong>结构性工具支持绿色、制造业等领域</div></div>
+  <div class="chain-map__update"><strong>2023—2026 延伸</strong><span>直接融资发展、传统信贷需求走弱 → 数量指标的解释力下降 → 更重视政策利率与短端市场利率的传导。</span></div>
+  <figcaption><span class="a" tabindex="0">图 2｜三条链是对研报叙事的概括，箭头表示重要影响路径，不表示单一原因或必然结果。<span class="pop"><span class="src">出处：手册一 §2.1、手册二 §2.2—§3、手册三 §2.1/§3.1、手册四 §2.2；央行 2024Q3 货政报告·专栏 4</span><br>下列三段与末段更新均附有对应报告原文和央行专栏摘录。</span></span></figcaption>
+</figure>
 <ol>
 <li>
 <p><span class="a" tabindex="0"><strong>增长引擎决定基础货币投放方式</strong>：出口双顺差（2001—2014）→ 外汇占款被动投放＋回笼对冲；外需退潮、资本外流（2014）→ 央行工具主动投放、重获主动权。<span class="pop"><span class="src">出处：手册一 §2.1；手册四 §2.2</span>（手册一 p.19）<br>原文：“当然央行在从银行手中换取外汇的同时，也向银行投放了大量的基础货币。这也是市场常说的“外汇占款投放渠道”。这时候为了避免市场出现流动性泛滥，央行货币政策的核心就是通过提高法定存款准备金率、发行央票等方式，控制市场的流动性，这一点我们在下文分析央行资产端和央行货币政策的时候，会再次讲到。”</span></span></p>
