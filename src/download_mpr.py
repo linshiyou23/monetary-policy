@@ -4,7 +4,8 @@
 数据来源：央行官网货币政策司"货币政策执行报告"栏目（单页列出 2001Q1 至最新各期）。
 用法: python -X utf8 src/download_mpr.py
 可重复运行：已存在且校验通过（%PDF 文件头）的文件跳过。
-输出: 《中国货币政策执行报告》/YYYYQn_中国货币政策执行报告.pdf + source_index.csv
+输出: sources/monetary_policy_report/YYYYQn_中国货币政策执行报告.pdf + source_index.csv
+（2026-10-23 起档案移入 sources/ 并用英文名 monetary_policy_report，PDF 文件名仍为中文。）
 """
 import csv
 import datetime
@@ -16,7 +17,7 @@ import time
 
 BASE = "https://www.pbc.gov.cn"
 LIST_URL = BASE + "/zhengcehuobisi/125207/125227/125957/index.html"
-OUT_DIR = "中国货币政策执行报告"
+OUT_DIR = os.path.join("sources", "monetary_policy_report")
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 QUARTERS = {"一": "Q1", "二": "Q2", "三": "Q3", "四": "Q4"}
 NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")

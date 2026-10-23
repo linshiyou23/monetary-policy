@@ -1,4 +1,5 @@
-# 原始研报 PDF 仅本地留存，不上传仓库
+# 原始研报 PDF 与央行报告档案（sources/ 内含 monetary_policy_report/）仅本地留存，不上传仓库；
+# 两份索引 CSV（sources/monetary_policy_report/*.csv）已 git add -f 强制入库，跟踪状态不受 ignore 影响
 sources/
 *.pdf
 
@@ -8,7 +9,5 @@ Thumbs.db
 Desktop.ini
 ~$*
 
-# 央行报告专栏提取文本：派生内容仅本地留存，索引 CSV 仍入库
-中国货币政策执行报告/专栏文章/
 # Python 缓存
 __pycache__/

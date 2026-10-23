@@ -14,7 +14,8 @@
 用法:
   python -X utf8 src/extract_mpr_columns.py --dry-run   # 仅检测并打印各期专栏
   python -X utf8 src/extract_mpr_columns.py             # 写出 Markdown 与索引
-输出: 中国货币政策执行报告/专栏文章/YYYYQn_专栏N_标题.md + 专栏文章_index.csv
+输出: sources/monetary_policy_report/columns/YYYYQn_专栏N_标题.md + 专栏文章_index.csv
+（2026-10-23 起档案移入 sources/：sources/monetary_policy_report/columns|columns_pdf，PDF 与 md 文件名仍为中文。）
 """
 import csv
 import glob
@@ -25,9 +26,10 @@ import time
 
 import pymupdf
 
-REPORT_DIR = "中国货币政策执行报告"
-OUT_SUB = "专栏文章"
-PDF_SUB = "专栏文章PDF"
+REPORT_DIR = os.path.join("sources", "monetary_policy_report")
+OUT_SUB = "columns"
+PDF_SUB = "columns_pdf"
+IDX_NAME = "专栏文章_index.csv"  # 索引文件名沿用中文：2026-10-23 仅文件夹改英文名，文件名不变
 # 人工补录：文本模式下版式无法判定、需按原件补入的段落（键为 (期次, 专栏号)）。
 # 2003Q2 专栏4 曾在此补录"三、中国债券市场展望"，收束规则改进后可自然完整
 # 提取，已移除；如日后发现新的截断案例，在此登记补录文本。
@@ -447,7 +449,7 @@ def main():
             })
         print(f"{tag}: {len(heads)} 篇专栏")
     if not dry:
-        idx = os.path.join(REPORT_DIR, f"{OUT_SUB}_index.csv")
+        idx = os.path.join(REPORT_DIR, IDX_NAME)
         with open(idx, "w", newline="", encoding="utf-8-sig") as f:
             w = csv.DictWriter(f, fieldnames=["issue", "column_no", "title", "pdf_pages", "chars", "file", "pdf_file"])
             w.writeheader()

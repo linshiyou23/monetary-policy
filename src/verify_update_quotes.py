@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-COLS = ROOT / "中国货币政策执行报告" / "专栏文章"
+COLS = ROOT / "sources" / "monetary_policy_report" / "columns"
 KOU_TXT = ROOT / "sources" / "txt" / "2024年6月以来我国央行对利率体系和调控框架的改革.txt"
 PAGES = ["site/framework.html", "site/evolution.html", "site/stages.html"]
 
