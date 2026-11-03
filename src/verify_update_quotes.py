@@ -6,6 +6,8 @@
 绿色批注（.a.grn 内的 .pop）：来源为寇文红博士文章 PDF 提取件（sources/txt/，仅本地留存），
 PDF 提取文本在数字与标点前后带有空格，故按"删除全部空白后"比对：
   <span class="src">观点补充：寇文红博士《……》</span>
+公告批注（.pop 内）：来源为央行公开市场业务公告清洗存档（sources/txt/，仅本地留存），逐字精确比对：
+  <span class="src">央行公告：公开市场业务公告〔2026〕第 N 号</span>
 一个 pop 可含多个 src 段；每个 q 归属于其前方最近的 src。
 用法：python -X utf8 src/verify_update_quotes.py
 """
@@ -16,10 +18,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 COLS = ROOT / "sources" / "monetary_policy_report" / "columns"
 KOU_TXT = ROOT / "sources" / "txt" / "2024年6月以来我国央行对利率体系和调控框架的改革.txt"
+ANN_DIR = ROOT / "sources" / "txt"
 PAGES = ["site/framework.html", "site/evolution.html", "site/stages.html"]
 
 SRC_RE = re.compile(r'<span class="src">央行更新：(\d{4})Q([1-4]) 货政报告·专栏 (\d+)《')
 KOU_RE = re.compile(r'<span class="src">观点补充：寇文红博士')
+ANN_RE = re.compile(r'<span class="src">央行公告：公开市场业务公告〔2026〕第(\d+)号')
 # q 段落以 ”</span> 收尾；摘录内部的嵌套弯引号后不会紧跟 </span>，故该终止符无歧义
 Q_RE = re.compile(r'<span class="q">“(.*?)”</span>', re.S)
 
@@ -32,6 +36,13 @@ def col_text(issue: str, no: str) -> str:
     hits = sorted(COLS.glob(f"{issue}_专栏{no}_*.md"))
     if not hits:
         raise FileNotFoundError(f"未找到专栏文件：{issue} 专栏{no}")
+    return hits[0].read_text(encoding="utf-8")
+
+
+def ann_text(no: str) -> str:
+    hits = sorted(ANN_DIR.glob(f"央行公开市场业务公告2026年第{no}号.txt"))
+    if not hits:
+        raise FileNotFoundError(f"未找到公告存档：2026 年第 {no} 号")
     return hits[0].read_text(encoding="utf-8")
 
 
@@ -64,7 +75,7 @@ def main() -> int:
         pops = extract_pops(html)
         checked_in_page = 0
         for pop in pops:
-            if "央行更新" not in pop and "寇文红博士" not in pop:
+            if "央行更新" not in pop and "寇文红博士" not in pop and "央行公告" not in pop:
                 continue
             # 按 src 分段，确定每段 q 的归属
             parts = re.split(r'(<span class="src">[^<]*</span>)', pop)
@@ -77,11 +88,18 @@ def main() -> int:
                 if KOU_RE.search(part):
                     cur_key = "KOU"
                     continue
+                m2 = ANN_RE.search(part)
+                if m2:
+                    cur_key = "ANN" + m2.group(1)
+                    continue
                 if cur_key is None:
                     continue
                 if cur_key == "KOU":
                     text = re.sub(r"\s+", "", kou_text())
                     quotes = [re.sub(r"\s+", "", q) for q in Q_RE.findall(part)]
+                elif isinstance(cur_key, str) and cur_key.startswith("ANN"):
+                    text = ann_text(cur_key[3:])
+                    quotes = Q_RE.findall(part)
                 else:
                     text = col_text(*cur_key)
                     quotes = Q_RE.findall(part)
